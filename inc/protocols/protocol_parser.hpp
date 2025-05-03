@@ -5,12 +5,17 @@
 namespace cya::halcpp::protocol
 {
 
+typedef struct Parser_In_Out{
+    utils::Buffer_Receiver* rx_buffer;
+    uint8_t* o_data;
+    uint16_t o_data_size;
+    void* user_param;   //  冗余变量，用于用于自定义扩展
+                        //  尽量用成员变量或者其它方式替代使用该变量
+}Parser_IO;
+
 class Protocol_Parser{
-protected:
-    utils::Buffer_Receiver* rx_buffer_;
 public:
-    Protocol_Parser( utils::Buffer_Receiver* rx_buffer );
-    void set_buffer( utils::Buffer_Receiver* rx_buffer );
+    virtual bool get_command( Parser_IO* pas_io) = 0;
 };
     
 }

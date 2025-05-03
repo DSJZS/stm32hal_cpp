@@ -5,8 +5,8 @@
 namespace cya::halcpp::protocol
 {
 
-Simple_Frame_Parser::Simple_Frame_Parser( utils::Buffer_Receiver* rx_buffer )
-    : Protocol_Parser(rx_buffer)
+Simple_Frame_Parser::Simple_Frame_Parser( uint8_t packet_head )
+    : packet_head_( packet_head )
 {}
 
 bool Simple_Frame_Parser::pack_data(uint8_t* packet, uint8_t* data,
@@ -60,23 +60,31 @@ int16_t Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint8_t
     return packet[1] - 3;
 }
 
-uint16_t Simple_Frame_Parser::get_command( uint8_t* data ,uint8_t packet_id)
+void Simple_Frame_Parser::set_packet_head( uint8_t packet_head )
+{
+    this->packet_head_ = packet_head;
+}
+
+bool Simple_Frame_Parser::get_command( Parser_IO* sfp_io)
 {
     int16_t ret = 0;
     uint16_t packet_size = 0;
     uint16_t read_size = 0;
-    uint8_t packet[256] = {0}; //  以后改为动态数组
-    packet_size = this->rx_buffer_->read(packet);
+
+    uint8_t packet[Simple_Frame_Parser::kParserBufferLength] = {0}; //  以后改为动态数组
+
+    packet_size = sfp_io->rx_buffer->read(packet);
     if( packet_size < Simple_Frame_Parser::kCommandMinLength )
-        return 0;
+        return false;
 
     while( 1 )
     {
-        ret = Simple_Frame_Parser::unpack_data(packet+read_size, data, packet_id);
+        ret = Simple_Frame_Parser::unpack_data(
+                packet + read_size, sfp_io->o_data, this->packet_head_ );
         if( ret == Simple_Frame_Parser::ParseState::SIZE_ERR )
         {
-            this->rx_buffer_->clear(read_size);
-            return 0;
+            sfp_io->rx_buffer->clear(read_size);
+            return false;
         }
         else if( ret == Simple_Frame_Parser::ParseState::HEAD_ERR ||
                 ret == Simple_Frame_Parser::ParseState::CHECK_SUM_ERR )
@@ -84,7 +92,7 @@ uint16_t Simple_Frame_Parser::get_command( uint8_t* data ,uint8_t packet_id)
             ++read_size;
             continue;
         } else{
-            return ret;
+            return true;
         }
     }
 }
