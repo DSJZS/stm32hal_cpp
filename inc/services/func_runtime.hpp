@@ -28,14 +28,14 @@ namespace cya::halcpp::services{
 class func_runtime{
 private:
     const char* func_name_;
-    driver::uart::Uart debug_uart_;
+    driver::Uart debug_uart_;
     driver::tim::Base debug_timer_ms_;
     uint32_t start_time_;
     uint32_t end_time_;
     static uint32_t s_max_loss_time_;
     static uint32_t s_min_loss_time_;
 public:
-    func_runtime(const char* __func_name__, const driver::uart::Uart& __debug_uart__,
+    func_runtime(const char* __func_name__, const driver::Uart& __debug_uart__,
             const driver::tim::Base& __debug_timer_ms__);
     ~func_runtime(void);
 };

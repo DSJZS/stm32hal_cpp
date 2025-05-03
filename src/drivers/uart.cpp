@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <cstring>
 
-namespace cya::halcpp::driver::uart{
+namespace cya::halcpp::driver{
 
 Uart::Uart(UART_HandleTypeDef* ptr_huart)
     : ptr_huart_(ptr_huart)

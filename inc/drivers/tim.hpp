@@ -50,7 +50,7 @@ protected:
     TIM_HandleTypeDef* ptr_htim_;
     uint32_t encoder_channel_;
 public:
-    Encoder(TIM_HandleTypeDef* ptr_encoder_htim,
+    Encoder(TIM_HandleTypeDef* ptr_htim_,
             uint32_t encoder_channel = TIM_CHANNEL_ALL,
             bool enable_enable = false);
     HAL_StatusTypeDef start(void) const;
