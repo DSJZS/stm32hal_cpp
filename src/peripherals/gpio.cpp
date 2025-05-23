@@ -1,7 +1,7 @@
 #include "main.h"
-#include "../../inc/drivers/gpio.hpp"
+#include "../../inc/peripherals/gpio.hpp"
 
-namespace cya::halcpp::driver::gpio{
+namespace cya::halcpp::peripheral::gpio{
 
 Pin::Pin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
     : port_(GPIOx), pin_(GPIO_Pin)

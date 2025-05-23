@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::halcpp::driver::gpio{
+namespace cya::halcpp::peripheral::gpio{
 
 class Pin{
 private:

@@ -1,10 +1,10 @@
 #include "main.h"
-#include "../../inc/drivers/uart.hpp"
+#include "../../inc/peripherals/uart.hpp"
 #include <stdio.h>
 #include <stdarg.h>
 #include <cstring>
 
-namespace cya::halcpp::driver{
+namespace cya::halcpp::peripheral{
 
 Uart::Uart(UART_HandleTypeDef* ptr_huart)
     : ptr_huart_(ptr_huart)

@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::halcpp::driver{
+namespace cya::halcpp::peripheral{
 
 class Uart{
 private:

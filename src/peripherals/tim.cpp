@@ -1,7 +1,7 @@
 #include "main.h"
-#include "../../inc/drivers/tim.hpp"
+#include "../../inc/peripherals/tim.hpp"
 
-namespace cya::halcpp::driver::tim{
+namespace cya::halcpp::peripheral::tim{
 
 Base::Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable)
     : ptr_htim_(ptr_htim)
