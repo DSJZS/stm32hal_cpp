@@ -4,7 +4,7 @@
 
 namespace cya::halcpp::interface{
 
-class I2C{
+class I2C_Interface{
 public:
     enum I2C_TRANS_DIR_{
         I2C_DIR_TRANSMITTER_ = 0x00,

@@ -1,12 +1,12 @@
 #pragma once
 
 #include "main.h"
-#include "i2c.hpp"
-#include "../drivers/gpio.hpp"
+#include "../interfaces/i2c_interface.hpp"
+#include "../peripherals/gpio.hpp"
 
-namespace cya::halcpp::interface{
+namespace cya::halcpp::protocol{
 
-class Soft_I2C : public I2C{
+class Soft_I2C : public interface::I2C_Interface{
 private:
     enum I2C_STATE_{
         I2C_BUS_BUSY_ = 0,
@@ -14,8 +14,8 @@ private:
         I2C_BUS_READY_
     };
 
-    driver::gpio::Pin sda_;
-    driver::gpio::Pin scl_;
+    peripheral::gpio::Pin sda_;
+    peripheral::gpio::Pin scl_;
     uint8_t level_trans_interval_;
     uint8_t number_of_retry_;
     void soft_delay(uint32_t dly);
@@ -33,7 +33,7 @@ private:
     uint8_t soft_read( uint8_t dev_addr, uint8_t reg_addr,
                 uint8_t data_len, uint8_t* data_buf);
 public:
-    Soft_I2C( const driver::gpio::Pin& sda, const driver::gpio::Pin& scl,
+    Soft_I2C( const peripheral::gpio::Pin& sda, const peripheral::gpio::Pin& scl,
             uint8_t level_trans_interval = 28, uint8_t number_of_retry_ = 4);
     virtual void init(void) override;
     virtual int write( uint8_t dev_addr, uint8_t reg_addr,
