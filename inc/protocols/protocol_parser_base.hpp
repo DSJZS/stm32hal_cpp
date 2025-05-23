@@ -13,7 +13,7 @@ typedef struct Parser_In_Out{
                         //  尽量用成员变量或者其它方式替代使用该变量
 }Parser_IO;
 
-class Protocol_Parser{
+class Protocol_Parser_Base{
 public:
     virtual bool get_command( Parser_IO* pas_io) = 0;
 };
