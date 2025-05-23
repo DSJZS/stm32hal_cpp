@@ -1,9 +1,9 @@
 #include "main.h"
-#include "../../inc/modlues/dc_motor.hpp"
-#include "../../inc/drivers/gpio.hpp"
-#include "../../inc/drivers/tim.hpp"
+#include "../../inc/modules/dc_motor.hpp"
+#include "../../inc/peripherals/gpio.hpp"
+#include "../../inc/peripherals/tim.hpp"
 
-namespace cya::halcpp::modlues{
+namespace cya::halcpp::module{
 
 DC_Motor::DC_Motor()
     : IN_1_(NULL,0), IN_2_(NULL,0), PWM_(NULL,0,0)
@@ -17,8 +17,8 @@ DC_Motor::DC_Motor(const DC_Motor& other)
     this->init();
 }
 
-DC_Motor::DC_Motor(const driver::gpio::Pin& IN_1, const driver::gpio::Pin& IN_2,
-                const driver::tim::Pwm_Channel& PWM)
+DC_Motor::DC_Motor(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
+                const peripheral::tim::Pwm_Channel& PWM)
     : IN_1_(IN_1), IN_2_(IN_2), PWM_(PWM)
 {
     this->init();   //  全局定义电机类时需要额外在程序中执行一遍 Motor::init()

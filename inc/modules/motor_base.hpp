@@ -2,9 +2,9 @@
 
 #include "main.h"
 
-namespace cya::halcpp::modlues{
+namespace cya::halcpp::module{
 
-class Motor{
+class Motor_Base{
 public:
     virtual void init(void) = 0;
     virtual void forward(void) const = 0;
