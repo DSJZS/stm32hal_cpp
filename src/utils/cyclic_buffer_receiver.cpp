@@ -6,7 +6,7 @@
 namespace cya::halcpp::utils{
 
 High_Speed_Data_Rx::High_Speed_Data_Rx( uint8_t* rx_buffer, uint16_t capacity)
-    : write_ptr_(0), read_ptr_(0)
+    : read_ptr_(0),write_ptr_(0)
 {
     this->rx_buffer_ = rx_buffer;
     this->capacity_ = capacity;
