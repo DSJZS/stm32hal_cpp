@@ -24,5 +24,5 @@
 
 /* 一些后缀与命名空间的解释
  * 接口应该用 Interface 后缀，并且放在 interfaces/，命名空间应该为 interface::
- * 通用基类应该用 Base 后缀( 考虑换成 Abstract 后缀 )
+ * 通用基类应该用 Base 后缀( 考虑换成 Abstract 后缀 )，并且与实现放在统一文件下，命名空间应该与实现相同
  */
