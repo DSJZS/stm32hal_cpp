@@ -73,16 +73,19 @@ uint16_t High_Speed_Data_Rx::read(uint8_t* data, uint16_t size)
     }
     return size;
 }
-//  删除数据，不指定 size 默认全删
+//  删除数据
 uint16_t High_Speed_Data_Rx::clear(uint16_t size)
 {
-    if( size >= this->length() )
+	uint16_t data_size = this->length();
+    if( size >= data_size )
     {
         this->read_ptr_ = 0;
         this->write_ptr_ = 0;
+        return data_size;
     } else {
         this->read_ptr_ += size;
         this->read_ptr_ %= this->capacity_;
+        return size;
     }
 }
 //  获取缓冲区当前有多少字节数据
