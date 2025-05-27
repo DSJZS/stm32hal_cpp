@@ -17,10 +17,38 @@ HAL_StatusTypeDef Base::start(void) const
     return HAL_ERROR;
 }
 
+HAL_StatusTypeDef Base::start_it(void) const
+{
+    if( this->ptr_htim_ )
+        return HAL_TIM_Base_Start_IT(this->ptr_htim_);
+    return HAL_ERROR;
+}
+
+HAL_StatusTypeDef Base::start_dma(const uint32_t *pData, uint16_t Length) const
+{
+    if( this->ptr_htim_ )
+        return HAL_TIM_Base_Start_DMA(this->ptr_htim_,pData,Length);
+    return HAL_ERROR;
+}
+
 HAL_StatusTypeDef Base::stop(void) const
 {
     if( this->ptr_htim_ )
         return HAL_TIM_Base_Stop(this->ptr_htim_);
+    return HAL_ERROR;
+}
+
+HAL_StatusTypeDef Base::stop_it(void) const
+{
+    if( this->ptr_htim_ )
+        return HAL_TIM_Base_Stop_IT(this->ptr_htim_);
+    return HAL_ERROR;
+}
+
+HAL_StatusTypeDef Base::stop_dma(void) const
+{
+    if( this->ptr_htim_ )
+        return HAL_TIM_Base_Stop_DMA(this->ptr_htim_);
     return HAL_ERROR;
 }
 
@@ -29,6 +57,11 @@ uint16_t Base::get_counter(void) const
     if( this->ptr_htim_ )
         return __HAL_TIM_GET_COUNTER(this->ptr_htim_);
     return 0;
+}
+
+TIM_HandleTypeDef* Base::ptr_handle(void) const
+{
+    return this->ptr_htim_;
 }
 
 void Base::set_counter(uint16_t tim_counter) const

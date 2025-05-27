@@ -10,9 +10,14 @@ protected:
 public:
     Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable = false);
     HAL_StatusTypeDef start(void) const;
+    HAL_StatusTypeDef start_it(void) const;
+    HAL_StatusTypeDef start_dma(const uint32_t *pData, uint16_t Length) const;
     HAL_StatusTypeDef stop(void) const;
+    HAL_StatusTypeDef stop_it(void) const;
+    HAL_StatusTypeDef stop_dma(void) const;
     void set_counter(uint16_t tim_counter) const;
     uint16_t get_counter(void) const;
+    TIM_HandleTypeDef* ptr_handle(void) const;
 };
 
 /*
