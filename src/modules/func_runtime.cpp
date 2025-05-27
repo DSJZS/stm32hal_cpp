@@ -29,7 +29,7 @@ func_runtime::~func_runtime(void)
 
     if( loss_timer > func_runtime::s_max_loss_time_ )
         func_runtime::s_max_loss_time_ = loss_timer;
-    else if( loss_timer < func_runtime::s_min_loss_time_ )
+    if( loss_timer < func_runtime::s_min_loss_time_ )
         func_runtime::s_min_loss_time_ = loss_timer;
 
     this->debug_uart_.printf("%s - max:%u us,min:%u us,cur:%u us\n",
