@@ -4,7 +4,7 @@
 #include "protocol_parser_base.hpp"
 #include "../utils/buffer_receiver.hpp"
 
-namespace cya::halcpp::protocol
+namespace cya::protocol
 {
 
 typedef class Simple_Frame_Parser : public Protocol_Parser_Base{

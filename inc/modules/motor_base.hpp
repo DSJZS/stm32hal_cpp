@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::halcpp::module{
+namespace cya::module{
 
 class Motor_Base{
 public:

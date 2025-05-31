@@ -8,7 +8,7 @@
 #include "../../inc/utils/PID.hpp"
 #include <cmath>
 
-namespace cya::halcpp::utils{
+namespace cya::utils{
 
 
 bool pid::float_abs_limit( float* num, float max)

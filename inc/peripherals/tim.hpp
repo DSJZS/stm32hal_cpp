@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::halcpp::peripheral::tim{
+namespace cya::peripheral::tim{
 
 class Base{
 protected:

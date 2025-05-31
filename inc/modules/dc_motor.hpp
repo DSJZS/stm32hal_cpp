@@ -5,7 +5,7 @@
 #include "../peripherals/gpio.hpp"
 #include "../peripherals/tim.hpp"
 
-namespace cya::halcpp::module{
+namespace cya::module{
 
 class DC_Motor : public Motor_Base{
 private:

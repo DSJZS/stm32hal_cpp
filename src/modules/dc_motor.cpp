@@ -3,7 +3,7 @@
 #include "../../inc/peripherals/gpio.hpp"
 #include "../../inc/peripherals/tim.hpp"
 
-namespace cya::halcpp::module{
+namespace cya::module{
 
 DC_Motor::DC_Motor()
     : IN_1_(NULL,0), IN_2_(NULL,0), PWM_(NULL,0,0)

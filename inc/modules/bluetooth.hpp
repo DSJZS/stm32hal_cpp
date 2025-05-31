@@ -1,6 +1,6 @@
 #pragma once
 
-namespace cya::halcpp::module{
+namespace cya::module{
 
 class Blue_Tooth{
 public:

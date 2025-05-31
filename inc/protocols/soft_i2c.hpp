@@ -4,7 +4,7 @@
 #include "../interfaces/i2c_interface.hpp"
 #include "../peripherals/gpio.hpp"
 
-namespace cya::halcpp::protocol{
+namespace cya::protocol{
 
 class Soft_I2C : public interface::I2C_Interface{
 private:

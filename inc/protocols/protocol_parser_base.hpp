@@ -2,7 +2,7 @@
 
 #include "../utils/buffer_receiver.hpp"
 
-namespace cya::halcpp::protocol
+namespace cya::protocol
 {
 
 typedef struct Parser_In_Out{

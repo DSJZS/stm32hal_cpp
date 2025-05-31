@@ -8,7 +8,7 @@
 /*  包含tim.h方便外部调取调试用串口的句柄*/
 #include "usart.h"
 
-namespace cya::halcpp::module{
+namespace cya::module{
 
 /* 函数耗时定时器
  * 用于测量一个函数耗费了多少时间

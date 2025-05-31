@@ -2,7 +2,7 @@
 #include "../../inc/protocols/simple_frame_parser.hpp"
 #include "../../inc/utils/buffer_receiver.hpp"
 
-namespace cya::halcpp::protocol
+namespace cya::protocol
 {
 
 Simple_Frame_Parser::Simple_Frame_Parser( uint8_t packet_head )

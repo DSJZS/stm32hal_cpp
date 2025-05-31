@@ -3,7 +3,7 @@
 #include "main.h"
 #include "buffer_receiver.hpp"
 
-namespace cya::halcpp::utils{
+namespace cya::utils{
 
 typedef class Low_Speed_Data_Rx : public Buffer_Receiver
 {

@@ -3,7 +3,7 @@
 #include "../../inc/utils/single_shot_receiver.hpp"
 #include <cstring>
 
-namespace cya::halcpp::utils{
+namespace cya::utils{
 
 Low_Speed_Data_Rx::Low_Speed_Data_Rx( uint8_t* rx_buffer, uint16_t capacity)
     : read_ptr_(0), write_ptr_(0)

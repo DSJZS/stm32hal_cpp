@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/peripherals/tim.hpp"
 
-namespace cya::halcpp::peripheral::tim{
+namespace cya::peripheral::tim{
 
 Base::Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable)
     : ptr_htim_(ptr_htim)

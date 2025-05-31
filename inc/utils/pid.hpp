@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::halcpp::utils{
+namespace cya::utils{
 
 class pid{
 private:

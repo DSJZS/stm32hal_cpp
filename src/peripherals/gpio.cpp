@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/peripherals/gpio.hpp"
 
-namespace cya::halcpp::peripheral::gpio{
+namespace cya::peripheral::gpio{
 
 Pin::Pin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
     : port_(GPIOx), pin_(GPIO_Pin)
