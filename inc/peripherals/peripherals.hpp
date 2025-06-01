@@ -5,3 +5,6 @@
 #include "gpio.hpp"
 #include "tim.hpp"
 #include "uart.hpp"
+
+/* 内存管理 */
+#include "./mem/memory_manager.hpp"
