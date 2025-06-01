@@ -32,6 +32,16 @@ GPIO_PinState Pin::read(void) const
     return GPIO_PIN_RESET;
 }
 
+void Pin::write(uint8_t pin_state) const
+{
+    if( this->port_ == NULL )
+        return;
+    if( pin_state != 0 )
+        this->set();
+    else
+        this->reset();
+}
+
 Port::Port(GPIO_TypeDef* GPIOx)
     : port_(GPIOx)
 {}

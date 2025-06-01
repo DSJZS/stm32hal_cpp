@@ -14,6 +14,7 @@ public:
     void reset(void) const;
     void toggle(void) const;
     GPIO_PinState read(void) const;
+    void write(uint8_t pin_state) const;
 };
 
 class Port{
