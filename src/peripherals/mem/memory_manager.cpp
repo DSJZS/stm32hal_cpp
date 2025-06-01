@@ -7,7 +7,7 @@ static class Mem_Manager{
 public:
     Mem_Manager();
     ~Mem_Manager();
-}mm;    //  定义全局变量以用其构造函数自动执行内存池初始化，无需外部执行
+}mm;    //  定义全局类对象, 其构造函数在main函数调用前自动执行(__libc_init_array)，无需外部执行初始化操作
 
 Mem_Manager::Mem_Manager()
 {
