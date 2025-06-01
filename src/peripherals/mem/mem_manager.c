@@ -65,7 +65,13 @@ MemoryStruct SDRAM_EX = {
 };
 */
 
-static MemoryStruct* default_memory = NULL;
+/* 务必将要使用的内存添加到此处，不添加到此处的内存无法被使用 */
+/* 支持 DMA 的内存 */
+static MemoryStruct* mm_dma_capable_list[] = { &SRAM_IN };
+/* 不支持 DMA 的内存 */
+static MemoryStruct* mm_no_dma_capable_list[] = { &CCM_RAM };
+
+static uint8_t mm_is_dma_capable;
 /*-----------------------------------------------------------*/
 
 /*合并内存*/
@@ -78,8 +84,6 @@ static const size_t pMemoryStructSize	= ( sizeof( BlockLink_t ) + ( ( size_t ) (
 /* 内存使用标志 BLOCK 的最高位 | pBlockAllocatedBit 表示已使用 */
 static size_t pBlockAllocatedBit = 0;
 
-void vTaskSuspendAll(void);
-void xTaskResumeAll(void);
 /*-----------------------------------------------------------*/
 
 void *pMemoryMalloc( MemoryStruct * mem , size_t xWantedSize )
@@ -87,9 +91,10 @@ void *pMemoryMalloc( MemoryStruct * mem , size_t xWantedSize )
 	BlockLink_t *pxBlock, *pxPreviousBlock, *pxNewBlockLink;
 	void *pvReturn = NULL;
 
-	vTaskSuspendAll();
+	uint32_t primask = enter_critical();
 	
 	/* 申请内存大小不能大于 pBlockAllocatedBit */
+	/* 不然可能会覆盖 已使用标志置位 */
 	if( ( xWantedSize & pBlockAllocatedBit ) == 0 )
 	{
 		if( xWantedSize > 0 )
@@ -118,7 +123,7 @@ void *pMemoryMalloc( MemoryStruct * mem , size_t xWantedSize )
 			}
 
 			/* 是否有满足条件的内存块 */
-			if( pxBlock != mem->pEnd )		// 如果 pxBlock = = pEnd[mem]  则找到了最后没找到   
+			if( pxBlock != mem->pEnd )		// 如果 pxBlock == pEnd[mem]  则找到了最后没找到   
 			{
 				/* 内存地址为  pxNextFreeBlock + pMemoryStructSize 为起始 */
 				pvReturn = ( void * ) ( ( ( uint8_t * ) pxPreviousBlock->pxNextFreeBlock ) + pMemoryStructSize );
@@ -158,7 +163,7 @@ void *pMemoryMalloc( MemoryStruct * mem , size_t xWantedSize )
 		}
 	}
 	
-	( void ) xTaskResumeAll();
+	( void ) exit_critical(primask);
 
 	return pvReturn;
 }
@@ -208,13 +213,13 @@ void pMemoryFree( MemoryStruct * mem , void *pv )
 			/* 去掉使用标志 */
 			pxLink->xBlockSize &= ~pBlockAllocatedBit;
 
-			vTaskSuspendAll();
+			uint32_t primask = enter_critical();
 			
 			/* 把这个BLOCK 添加到剩余内存中 */
 			mem->Free += pxLink->xBlockSize;
 			pInsertBlockIntoFreeList( mem , ( ( BlockLink_t * ) pxLink ) );
 
-			( void ) xTaskResumeAll();
+			( void ) exit_critical(primask);
 		}
 	}
 }
@@ -325,47 +330,109 @@ static void pInsertBlockIntoFreeList( MemoryStruct * mem , BlockLink_t *pxBlockT
 }
 /*-----------------------------------------------------------*/
 
-/*  进入临界区函数 */
-void vTaskSuspendAll(void) 
+/*	从内存中查找是否有某个自由块 */
+static uint8_t pMemoryFindBlock( MemoryStruct* mem, void *pv)
 {
-	enter_critical();
+	uint8_t *puc = ( uint8_t * ) pv;
+	BlockLink_t *pxLink,*pBlock;
+
+	if( pv == NULL )
+		return 0;
+	
+	/* 内存BLOCK list 地址为内存地址 - pMemoryStructSize 在申请的时候会 + pMemoryStructSize */
+	puc -= pMemoryStructSize;
+
+	/* 使用  puc 避免编译器报警告 */
+	pxLink = ( void * ) puc;
+	for( pBlock = &mem->pStart; pBlock != mem->pEnd ; pBlock = pBlock->pxNextFreeBlock)
+	{
+		if( pBlock == pxLink )
+			return 1;
+	}
+	return 0;
 }
 /*-----------------------------------------------------------*/
 
-/*  退出临界区函数 */
-void xTaskResumeAll(void)
-{   
-	exit_critical();
-}
-/*-----------------------------------------------------------*/
-
-/*  内存池默认指向空间设置 */
-void memory_pool_setDefault( MemoryStruct* def_mem )
+/*  设置内存分配是否支持DMA */
+static void memory_pool_set_dma_capable( uint8_t is_capable )
 {
-	default_memory = def_mem;
+	uint32_t primask = enter_critical();
+	if( is_capable != 0 )
+	{
+		mm_is_dma_capable = 1;
+	} else {
+		mm_is_dma_capable = 0;
+	}
+	( void ) exit_critical(primask);
 }
 /*-----------------------------------------------------------*/
 
 /*  内存池初始化 */
-void memory_pool_init( void )
+void memory_pool_init( uint8_t is_dma_capable )
 {
-	pMemoryInit( &SRAM_IN );
-	pMemoryInit( &CCM_RAM );
-	memory_pool_setDefault(&SRAM_IN);
+	uint8_t i = 0;
+	memory_pool_set_dma_capable( is_dma_capable );
+
+	for( i = 0 ; i < sizeof(mm_no_dma_capable_list) / sizeof(mm_no_dma_capable_list[0]) ; ++i)
+	{
+		pMemoryInit( mm_no_dma_capable_list[i] );
+	}
+
+	for( i = 0 ; i < sizeof(mm_dma_capable_list) / sizeof(mm_dma_capable_list[0]) ; ++i)
+	{
+		pMemoryInit( mm_dma_capable_list[i] );
+	}
 }
 /*-----------------------------------------------------------*/
 
 /*  malloc接口 */
 void * memory_pool_malloc( size_t xWantedSize )
 {
-	return pMemoryMalloc( default_memory , xWantedSize );
+	uint8_t i = 0;
+	void * pv = NULL;
+
+	if( mm_is_dma_capable == 0 )
+	{
+		for( i = 0 ; i < sizeof(mm_no_dma_capable_list) / sizeof(mm_no_dma_capable_list[0]) ; ++i)
+		{
+			pv = pMemoryMalloc( mm_no_dma_capable_list[i] , xWantedSize );
+			if( pv != NULL )
+				return pv;
+		}
+	}
+
+	for( i = 0 ; i < sizeof(mm_dma_capable_list) / sizeof(mm_dma_capable_list[0]) ; ++i)
+	{
+		pv = pMemoryMalloc( mm_dma_capable_list[i] , xWantedSize );
+		if( pv != NULL )
+			break;
+	}
+	return pv;
 }
 /*-----------------------------------------------------------*/
 
 /*  free接口 */
 void memory_pool_free( void *pv )
 {
-	pMemoryFree( default_memory , pv );
+	uint8_t i = 0;
+
+	if( mm_is_dma_capable == 0 )
+	{
+		for( i = 0 ; i < sizeof(mm_no_dma_capable_list) / sizeof(mm_no_dma_capable_list[0]) ; ++i)
+		{
+			if( pMemoryFindBlock( mm_no_dma_capable_list[i], pv) )
+				return;
+		}
+	}
+
+	for( i = 0 ; i < sizeof(mm_dma_capable_list) / sizeof(mm_dma_capable_list[0]) ; ++i)
+	{
+		if( pMemoryFindBlock( mm_dma_capable_list[i], pv) )
+			return;
+	}
+
+	/* 错误 free 警告 */
+	/* ... */
 }
 /*-----------------------------------------------------------*/
 
