@@ -355,12 +355,7 @@ void memory_pool_set_dma_capable( uint8_t is_capable )
 void memory_pool_init( uint8_t is_dma_capable )
 {
 	uint8_t i = 0;
-	if( is_dma_capable != 0 )
-	{
-		mm_is_dma_capable = 1;
-	} else {
-		mm_is_dma_capable = 0;
-	}
+	memory_pool_set_dma_capable( is_dma_capable );
 
 	for( i = 0 ; i < sizeof(mm_no_dma_capable_list) / sizeof(mm_no_dma_capable_list[0]) ; ++i)
 	{
