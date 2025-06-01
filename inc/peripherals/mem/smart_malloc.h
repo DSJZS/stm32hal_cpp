@@ -6,6 +6,8 @@ extern "C"
 {
 #endif
 
+#include <stddef.h>
+
 void* malloc(size_t size);
 
 #ifdef __cplusplus
