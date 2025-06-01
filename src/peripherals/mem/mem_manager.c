@@ -333,37 +333,21 @@ static void pInsertBlockIntoFreeList( MemoryStruct * mem , BlockLink_t *pxBlockT
 /*	从内存中查找是否有某个自由块 */
 static uint8_t pMemoryFindBlock( MemoryStruct* mem, void *pv)
 {
-	uint8_t *puc = ( uint8_t * ) pv;
-	BlockLink_t *pxLink,*pBlock;
-
-	if( pv == NULL )
-		return 0;
-	
-	/* 内存BLOCK list 地址为内存地址 - pMemoryStructSize 在申请的时候会 + pMemoryStructSize */
-	puc -= pMemoryStructSize;
-
-	/* 使用  puc 避免编译器报警告 */
-	pxLink = ( void * ) puc;
-	for( pBlock = &mem->pStart; pBlock != mem->pEnd ; pBlock = pBlock->pxNextFreeBlock)
-	{
-		if( pBlock == pxLink )
-			return 1;
-	}
+	if( ( pv >= ( void* )( mem->pMemory ) ) && ( pv < (void*)( mem->pMemory + mem->size ) ))
+		return 1;
 	return 0;
 }
 /*-----------------------------------------------------------*/
 
 /*  设置内存分配是否支持DMA */
-static void memory_pool_set_dma_capable( uint8_t is_capable )
+void memory_pool_set_dma_capable( uint8_t is_capable )
 {
-	uint32_t primask = enter_critical();
 	if( is_capable != 0 )
 	{
 		mm_is_dma_capable = 1;
 	} else {
 		mm_is_dma_capable = 0;
 	}
-	( void ) exit_critical(primask);
 }
 /*-----------------------------------------------------------*/
 
@@ -371,7 +355,12 @@ static void memory_pool_set_dma_capable( uint8_t is_capable )
 void memory_pool_init( uint8_t is_dma_capable )
 {
 	uint8_t i = 0;
-	memory_pool_set_dma_capable( is_dma_capable );
+	if( is_dma_capable != 0 )
+	{
+		mm_is_dma_capable = 1;
+	} else {
+		mm_is_dma_capable = 0;
+	}
 
 	for( i = 0 ; i < sizeof(mm_no_dma_capable_list) / sizeof(mm_no_dma_capable_list[0]) ; ++i)
 	{
@@ -407,6 +396,7 @@ void * memory_pool_malloc( size_t xWantedSize )
 		if( pv != NULL )
 			break;
 	}
+
 	return pv;
 }
 /*-----------------------------------------------------------*/
@@ -421,14 +411,20 @@ void memory_pool_free( void *pv )
 		for( i = 0 ; i < sizeof(mm_no_dma_capable_list) / sizeof(mm_no_dma_capable_list[0]) ; ++i)
 		{
 			if( pMemoryFindBlock( mm_no_dma_capable_list[i], pv) )
+			{
+				pMemoryFree(mm_no_dma_capable_list[i],pv);
 				return;
+			}
 		}
 	}
 
 	for( i = 0 ; i < sizeof(mm_dma_capable_list) / sizeof(mm_dma_capable_list[0]) ; ++i)
 	{
 		if( pMemoryFindBlock( mm_dma_capable_list[i], pv) )
+		{
+			pMemoryFree(mm_dma_capable_list[i],pv);
 			return;
+		}
 	}
 
 	/* 错误 free 警告 */
