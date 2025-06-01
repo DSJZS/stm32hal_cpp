@@ -13,7 +13,7 @@ extern "C"
 /*  进入临界区函数  */
 uint32_t enter_critical(void);
 /*  退出临界区函数  */
-void exit_critical(void);
+void exit_critical(uint32_t primask);
 
 #ifdef __cplusplus
 }
