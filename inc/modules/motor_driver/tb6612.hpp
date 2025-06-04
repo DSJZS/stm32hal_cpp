@@ -7,15 +7,15 @@
 
 namespace cya::module::motor_driver{
 
-class TB6612 : public motor_driver::Base{
+class Tb6612 : public motor_driver::Base{
 private:
     const peripheral::gpio::Pin IN_1_;
     const peripheral::gpio::Pin IN_2_;
     const peripheral::tim::Pwm_Channel PWM_;
 public:
-    TB6612();
-    TB6612(const TB6612& other);
-    TB6612(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
+    Tb6612();
+    Tb6612(const Tb6612& other);
+    Tb6612(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
                 const peripheral::tim::Pwm_Channel& PWM);
     virtual void init(void) override;
     virtual void forward(void) const override;
