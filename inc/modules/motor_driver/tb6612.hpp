@@ -1,21 +1,21 @@
 #pragma once
 
 #include "main.h"
-#include "motor_base.hpp"
-#include "../peripherals/gpio.hpp"
-#include "../peripherals/tim.hpp"
+#include "motor_driver_base.hpp"
+#include "../../peripherals/gpio.hpp"
+#include "../../peripherals/tim.hpp"
 
-namespace cya::module{
+namespace cya::module::motor_driver{
 
-class DC_Motor : public Motor_Base{
+class TB6612 : public motor_driver::Base{
 private:
     const peripheral::gpio::Pin IN_1_;
     const peripheral::gpio::Pin IN_2_;
     const peripheral::tim::Pwm_Channel PWM_;
 public:
-    DC_Motor();
-    DC_Motor(const DC_Motor& other);
-    DC_Motor(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
+    TB6612();
+    TB6612(const TB6612& other);
+    TB6612(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
                 const peripheral::tim::Pwm_Channel& PWM);
     virtual void init(void) override;
     virtual void forward(void) const override;

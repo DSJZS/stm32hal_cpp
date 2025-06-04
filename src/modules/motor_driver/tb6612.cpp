@@ -1,49 +1,51 @@
 #include "main.h"
-#include "../../inc/modules/dc_motor.hpp"
-#include "../../inc/peripherals/gpio.hpp"
-#include "../../inc/peripherals/tim.hpp"
+#include "../../../inc/modules/motor_driver/tb6612.hpp"
+#include "../../../inc/peripherals/gpio.hpp"
+#include "../../../inc/peripherals/tim.hpp"
 
-namespace cya::module{
+namespace cya::module::motor_driver{
 
-DC_Motor::DC_Motor()
+//  全局定义电机类时需要额外在程序中执行一遍 init()
+
+TB6612::TB6612()
     : IN_1_(NULL,0), IN_2_(NULL,0), PWM_(NULL,0,0)
 {
-    //  空电机类，为了避免全局类无法正常初始化外设的问题
+    this->init();
 }
 
-DC_Motor::DC_Motor(const DC_Motor& other)
+TB6612::TB6612(const TB6612& other)
     : IN_1_(other.IN_1_), IN_2_(other.IN_2_), PWM_(other.PWM_)
 {
     this->init();
 }
 
-DC_Motor::DC_Motor(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
+TB6612::TB6612(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
                 const peripheral::tim::Pwm_Channel& PWM)
     : IN_1_(IN_1), IN_2_(IN_2), PWM_(PWM)
 {
-    this->init();   //  全局定义电机类时需要额外在程序中执行一遍 Motor::init()
+    this->init();   
 }
 
-void DC_Motor::init(void)
+void TB6612::init(void)
 {
     this->set_speed(0);
     this->PWM_.start();
 }
 
-void DC_Motor::forward(void) const
+void TB6612::forward(void) const
 {
     this->IN_1_.set();
     this->IN_2_.reset();
 }
 
-void DC_Motor::back(void) const
+void TB6612::back(void) const
 {
     this->IN_1_.reset();
     this->IN_2_.set();
 }
 
 // base_speed ∈ ( -200 ~ 200 )
-int16_t DC_Motor::set_speed(float base_speed) const
+int16_t TB6612::set_speed(float base_speed) const
 {
     if ( base_speed > 0 )
     {
@@ -63,13 +65,13 @@ int16_t DC_Motor::set_speed(float base_speed) const
     return base_speed;
 }
 
-void DC_Motor::bark(void) const
+void TB6612::bark(void) const
 {
     this->IN_1_.set();
     this->IN_2_.set();
 }
 
-void DC_Motor::stop(void) const
+void TB6612::stop(void) const
 {
     this->IN_1_.reset();
     this->IN_2_.reset();

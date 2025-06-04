@@ -2,9 +2,9 @@
 
 #include "main.h"
 
-namespace cya::module{
+namespace cya::module::motor_driver{
 
-class Motor_Base{
+class Base{
 public:
     virtual void init(void) = 0;
     virtual void forward(void) const = 0;
