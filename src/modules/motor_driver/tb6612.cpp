@@ -1,5 +1,5 @@
 #include "main.h"
-#include "../../../inc/modules/motor_driver/Tb6612.hpp"
+#include "../../../inc/modules/motor_driver/tb6612.hpp"
 #include "../../../inc/peripherals/gpio.hpp"
 #include "../../../inc/peripherals/tim.hpp"
 

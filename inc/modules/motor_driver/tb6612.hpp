@@ -1,7 +1,7 @@
 #pragma once
 
 #include "main.h"
-#include "motor_driver_base.hpp"
+#include "./base.hpp"
 #include "../../peripherals/gpio.hpp"
 #include "../../peripherals/tim.hpp"
 
