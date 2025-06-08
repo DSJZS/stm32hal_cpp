@@ -12,14 +12,20 @@
 #include "legacy/data_packet_process_interface.hpp"
 
 /* 文件的依赖关系
- * 目录					可依赖的目录									禁止依赖的目录
- * interfaces			无（仅定义接口，不依赖其他目录）						所有目录
- * legacy				utils（允许使用基础工具）							尽量避免被其他目录依赖（尤其是新代码）
+ * 目录					可依赖的目录				                  禁止依赖的目录
+ * interfaces			无（仅定义接口，不依赖其他目录）		        所有目录
+ * legacy				utils（允许使用基础工具）					    尽量避免被其他目录依赖（尤其是新代码）
  * modules				interfaces, peripherals, protocols, utils	services, legacy
  * peripherals			interfaces（实现接口）, utils					modules, protocols, services
  * protocols			interfaces, peripherals（若依赖硬件）, utils		modules, services
  * services				modules, protocols, utils					peripherals, legacy
  * utils				无（完全独立）									所有目录
+ */
+
+/* 项目命名规范
+ * 
+ * 
+ * 
  */
 
 /* 一些后缀与命名空间的解释
@@ -31,4 +37,5 @@
  * 1.完成ADC
  * 2.完成OLED封装
  * 3.测试通讯协议
+ * 4.完成硬件I2C
  */
