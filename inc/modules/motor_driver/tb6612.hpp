@@ -1,6 +1,5 @@
 #pragma once
 
-#include "main.h"
 #include "./base.hpp"
 #include "../../peripherals/gpio.hpp"
 #include "../../peripherals/tim.hpp"
@@ -12,17 +11,19 @@ private:
     const peripheral::gpio::Pin IN_1_;
     const peripheral::gpio::Pin IN_2_;
     const peripheral::tim::Pwm_Channel PWM_;
+
+    void forward(void) const;
+    void back(void) const;
+    void bark(void) const;
+    void stop(void) const;
 public:
-    Tb6612();
     Tb6612(const Tb6612& other);
     Tb6612(const peripheral::gpio::Pin& IN_1, const peripheral::gpio::Pin& IN_2,
-                const peripheral::tim::Pwm_Channel& PWM);
+            const peripheral::tim::Pwm_Channel& PWM);
+
     virtual void init(void) override;
-    virtual void forward(void) const override;
-    virtual void back(void) const override;
-    virtual int16_t set_speed(float base_speed = 0.0f) const override;
-    virtual void bark(void) const override;
-    virtual void stop(void) const override;
+    virtual void set_speed(float base_speed = 0.0f) const override;
+    
 };
 
 }
