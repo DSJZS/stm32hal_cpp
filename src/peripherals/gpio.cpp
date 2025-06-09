@@ -42,13 +42,13 @@ void Pin::write(uint8_t pin_state) const
         this->reset();
 }
 
-Pin& Pin::operator>>( uint8_t& state )
+Pin& Pin::operator>>( uint8_t state )
 {
     state = this->read();
     return *this;
 }
 
-Pin& Pin::operator<<( uint8_t& state)
+Pin& Pin::operator<<( uint8_t state)
 {
     this->write(state);
     return *this;
@@ -97,13 +97,13 @@ void Port::write(uint16_t port_state) const
     }
 }
 
-Port& Port::operator>>( uint16_t& state)
+Port& Port::operator>>( uint16_t state)
 {
     state = this->read();
     return *this;
 }
 
-Port& Port::operator<<( uint16_t& state)
+Port& Port::operator<<( uint16_t state)
 {
     this->write(state);
     return *this;
