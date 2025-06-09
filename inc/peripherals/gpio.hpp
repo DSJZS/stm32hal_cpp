@@ -15,6 +15,9 @@ public:
     void toggle(void) const;
     GPIO_PinState read(void) const;
     void write(uint8_t pin_state) const;
+
+    Pin& operator>>( uint8_t& state);
+    Pin& operator<<( uint8_t& state);
 };
 
 class Port{
@@ -26,6 +29,10 @@ public:
     void reset(void) const;
     void toggle(void) const;
     uint16_t read(void) const;
+    void write(uint16_t port_state) const;
+
+    Port& operator>>( uint16_t& state);
+    Port& operator<<( uint16_t& state);
 };
 
 }

@@ -42,6 +42,18 @@ void Pin::write(uint8_t pin_state) const
         this->reset();
 }
 
+Pin& Pin::operator>>( uint8_t& state )
+{
+    state = this->read();
+    return *this;
+}
+
+Pin& Pin::operator<<( uint8_t& state)
+{
+    this->write(state);
+    return *this;
+}
+
 Port::Port(GPIO_TypeDef* GPIOx)
     : port_(GPIOx)
 {}
@@ -49,24 +61,52 @@ Port::Port(GPIO_TypeDef* GPIOx)
 void Port::set(void) const
 {
     if( this->port_ )
-            HAL_GPIO_WritePin(this->port_, GPIO_PIN_All, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(this->port_, GPIO_PIN_All, GPIO_PIN_SET);
 }
 
 void Port::reset(void) const
 {
     if( this->port_ )
-            HAL_GPIO_WritePin(this->port_, GPIO_PIN_All, GPIO_PIN_RESET);
+        HAL_GPIO_WritePin(this->port_, GPIO_PIN_All, GPIO_PIN_RESET);
 }
 
 void Port::toggle(void) const
 {
     if( this->port_ )
-            HAL_GPIO_TogglePin(this->port_, GPIO_PIN_All);
+        HAL_GPIO_TogglePin(this->port_, GPIO_PIN_All);
 }
 
 uint16_t Port::read(void) const
 {
-    return (uint16_t)( this->port_->IDR );
+    if( this->port_ )
+        return (uint16_t)( this->port_->IDR );
+    return 0;
+}
+
+void Port::write(uint16_t port_state) const
+{
+    if( this->port_ )
+    {
+        for( uint32_t i = (uint32_t)0x0001 ; i < (uint32_t)0xFFFF ; i <<= 1 )
+        {
+            if( port_state & i )
+                HAL_GPIO_WritePin(this->port_, i, GPIO_PIN_SET);
+            else
+                HAL_GPIO_WritePin(this->port_, i, GPIO_PIN_RESET);
+        }
+    }
+}
+
+Port& Port::operator>>( uint16_t& state)
+{
+    state = this->read();
+    return *this;
+}
+
+Port& Port::operator<<( uint16_t& state)
+{
+    this->write(state);
+    return *this;
 }
 
 }
