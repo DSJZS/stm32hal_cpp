@@ -41,8 +41,8 @@ public:
         const peripheral::gpio::Pin& PULSE);
 
     virtual void init(void) override;
-    virtual void set_speed(float base_speed = 0.0f) const override;
-    virtual void set_angle(float angle) const override;
+    virtual void set_speed(float base_speed = 0.0f) const override; //  undefined
+    virtual void set_angle(float angle) const override;             //  undefined
 };
 
 /* 如果要使用 set_angle 方法, 门空配置方法
@@ -69,7 +69,14 @@ public:
  * 
  * 
  * Slave TIM        ITR0    ITR1    ITR2    ITR3
- * 
+ *       TIM1       TIM5    TIM2    TIM3    TIM4
+ *       TIM2       TIM1    TIM8    TIM3    TIM4
+ *       TIM3       TIM1    TIM2    TIM5    TIM4
+ *       TIM4       TIM1    TIM2    TIM3    TIM8
+ *       TIM5       TIM2    TIM3    TIM4    TIM8
+ *       TIM8       TIM1    TIM2    TIM4    TIM5
+ *       TIM9       TIM2    TIM3    TIM10   TIM11
+ *       TIM12      TIM4    TIM5    TIM13   TIM14
  */
 class Dm542c_Pwm : public Dm542c{
 private:
