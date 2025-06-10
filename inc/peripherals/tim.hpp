@@ -4,9 +4,28 @@
 
 namespace cya::peripheral::tim{
 
-class Base{
+class Core{ //  方便用户修改对应数据
 protected:
     TIM_HandleTypeDef* ptr_htim_;
+public:
+    Core(TIM_HandleTypeDef* ptr_htim);
+
+    //  计数值
+    void set_cnt( uint16_t cnt ) const;
+    uint16_t get_cnt(void) const;
+
+    //  重装载值
+    void set_arr( uint16_t arr ) const;
+    uint16_t get_arr(void) const;
+
+    //  预分频值
+    void set_psc( uint16_t psc ) const;
+    uint16_t get_psc(void) const;
+
+    TIM_HandleTypeDef* ptr_handle(void) const;
+};
+
+class Base : public Core{
 public:
     Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable = false);
     HAL_StatusTypeDef start(void) const;
@@ -15,9 +34,6 @@ public:
     HAL_StatusTypeDef stop(void) const;
     HAL_StatusTypeDef stop_it(void) const;
     HAL_StatusTypeDef stop_dma(void) const;
-    void set_counter(uint16_t tim_counter) const;
-    uint16_t get_counter(void) const;
-    TIM_HandleTypeDef* ptr_handle(void) const;
 };
 
 /*
@@ -35,24 +51,19 @@ public:
 };
 */
 
-class Pwm_Channel{
+class Pwm_Channel : public Core{
 protected:
-    TIM_HandleTypeDef* ptr_htim_;
     uint32_t pwm_channel_;
-    uint16_t max_speed_compare_;
-    uint16_t min_speed_compare_;
 public:
-    Pwm_Channel(TIM_HandleTypeDef* ptr_htim_,uint32_t pwm_channel,
-            uint16_t max_speed_compare, uint16_t min_speed_compare = 0,
-            bool pwm_enable = false);
+    Pwm_Channel(TIM_HandleTypeDef* ptr_htim_,uint32_t pwm_channel,bool pwm_enable = false);
     HAL_StatusTypeDef start(void) const;
     HAL_StatusTypeDef stop(void) const;
-    void set_compare(float compare_value) const;
+    void set_duty(float duty) const;
+    void set_compare(uint16_t ccr) const;
 };
 
-class Encoder{
+class Encoder : public Core{
 protected:
-    TIM_HandleTypeDef* ptr_htim_;
     uint32_t encoder_channel_;
 public:
     Encoder(TIM_HandleTypeDef* ptr_htim_,

@@ -3,8 +3,56 @@
 
 namespace cya::peripheral::tim{
 
-Base::Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable)
+Core::Core(TIM_HandleTypeDef* ptr_htim)
     : ptr_htim_(ptr_htim)
+{}
+
+void Core::set_cnt(uint16_t cnt) const
+{
+    if( this->ptr_htim_ )
+        __HAL_TIM_SET_COUNTER(this->ptr_htim_, cnt);
+}
+
+uint16_t Core::get_cnt(void) const
+{
+    if( this->ptr_htim_ )
+        return __HAL_TIM_GET_COUNTER(this->ptr_htim_);
+    return 0;
+}
+
+void Core::set_arr( uint16_t arr ) const
+{
+    if( this->ptr_htim_ )
+        __HAL_TIM_SET_AUTORELOAD(this->ptr_htim_, arr);
+}
+
+uint16_t Core::get_arr(void) const
+{
+    if( this->ptr_htim_ )
+        return __HAL_TIM_GET_AUTORELOAD(this->ptr_htim_);
+    return 0;
+}
+
+void Core::set_psc( uint16_t psc ) const
+{
+    if( this->ptr_htim_ )
+        __HAL_TIM_SET_PRESCALER(this->ptr_htim_, psc);
+}
+
+uint16_t Core::get_psc(void) const
+{
+    if( this->ptr_htim_ )
+        return this->ptr_htim_->Instance->PSC;
+    return 0;
+}
+
+TIM_HandleTypeDef* Core::ptr_handle(void) const
+{
+    return this->ptr_htim_;
+}
+
+Base::Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable)
+    : Core(ptr_htim)
 {
     if(tim_enable && this->ptr_htim_)
         this->start();
@@ -52,30 +100,9 @@ HAL_StatusTypeDef Base::stop_dma(void) const
     return HAL_ERROR;
 }
 
-uint16_t Base::get_counter(void) const
-{
-    if( this->ptr_htim_ )
-        return __HAL_TIM_GET_COUNTER(this->ptr_htim_);
-    return 0;
-}
-
-TIM_HandleTypeDef* Base::ptr_handle(void) const
-{
-    return this->ptr_htim_;
-}
-
-void Base::set_counter(uint16_t tim_counter) const
-{
-    if( this->ptr_htim_ )
-        __HAL_TIM_SET_COUNTER(this->ptr_htim_, tim_counter);
-}
-
 Pwm_Channel::Pwm_Channel(
-        TIM_HandleTypeDef* ptr_htim,uint32_t pwm_channel,
-        uint16_t max_speed_compare, uint16_t min_speed_compare,
-        bool pwm_enable)
-    : ptr_htim_(ptr_htim), pwm_channel_(pwm_channel),
-      max_speed_compare_(max_speed_compare),min_speed_compare_(min_speed_compare)
+        TIM_HandleTypeDef* ptr_htim,uint32_t pwm_channel,bool pwm_enable)
+    : Core(ptr_htim), pwm_channel_(pwm_channel)
 {
     if( pwm_enable && this->ptr_htim_ )
         this->start();
@@ -94,17 +121,24 @@ HAL_StatusTypeDef Pwm_Channel::stop(void) const
         return HAL_TIM_PWM_Stop(this->ptr_htim_, this->pwm_channel_);
     return HAL_ERROR;
 }
-
-void Pwm_Channel::set_compare(float compare_value) const
+// duty = CCR / (ARR + 1)
+// CCR = duty * (ARR + 1)
+void Pwm_Channel::set_duty(float duty) const
 {
     if( this->ptr_htim_ )
         __HAL_TIM_SET_COMPARE(this->ptr_htim_,this->pwm_channel_,
-            compare_value * ( this->max_speed_compare_ - this->min_speed_compare_));
+            duty * ( __HAL_TIM_GET_AUTORELOAD(this->ptr_htim_) + 1 ));
+}
+
+void Pwm_Channel::set_compare(uint16_t ccr) const
+{
+    if( this->ptr_htim_ )
+        __HAL_TIM_SET_COMPARE(this->ptr_htim_,this->pwm_channel_,ccr);
 }
 
 Encoder::Encoder(TIM_HandleTypeDef* ptr_htim,
         uint32_t encoder_channel, bool enable_enable)
-    : ptr_htim_(ptr_htim), encoder_channel_(encoder_channel)
+    : Core(ptr_htim), encoder_channel_(encoder_channel)
 {
     if( enable_enable && this->ptr_htim_ )
         HAL_TIM_Encoder_Start(this->ptr_htim_, this->encoder_channel_);
