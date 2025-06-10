@@ -28,6 +28,7 @@ protected:
     void set_enable( uint8_t enable) const;
     void set_dire( Dm542c::DireType dire) const;
 
+    //  set_speed 会关闭门控定位，set_angle 会开启门控定位
     virtual void set_angle(float angle) const = 0;
 };
 

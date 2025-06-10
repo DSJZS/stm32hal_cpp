@@ -98,6 +98,28 @@ void Dm542c_Pwm::set_step(uint16_t step) const
     // this->GATE_.start();
 }
 
+void Dm542c_Pwm::set_speed(float base_speed) const
+{
+    if ( base_speed > 0 )
+    {
+        this->set_dire( Dm542c::DireType::CW );
+    }
+    else if( base_speed < 0 )
+    {
+        this->set_dire( Dm542c::DireType::CCW );
+        base_speed = -base_speed;
+    }
+    else
+    {
+        this->set_enable(0);
+        return;
+    }
+
+    this->set_enable(1);
+    this->PULSE_.set_duty(base_speed);
+    this->GATE_.set_duty(1);    //  关闭门控
+}
+
 // step = angle / ( 1.8 / microsteps )
 void Dm542c_Pwm::set_angle(float angle) const
 {
