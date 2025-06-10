@@ -67,7 +67,7 @@ void Tb6612::set_speed(float base_speed) const
         this->bark();
     }
 
-    this->PWM_.set_compare(base_speed);
+    this->PWM_.set_duty(base_speed);
 }
 
 }

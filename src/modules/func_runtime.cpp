@@ -16,13 +16,13 @@ func_runtime::func_runtime(const char* __func_name__,
       start_time_(0), end_time_(0)
 {
     debug_timer_ms_.start();
-    debug_timer_ms_.set_counter(0);
-    this->start_time_ = debug_timer_ms_.get_counter();
+    debug_timer_ms_.set_cnt(0);
+    this->start_time_ = debug_timer_ms_.get_cnt();
 }
 
 func_runtime::~func_runtime(void)
 {
-    this->end_time_ = debug_timer_ms_.get_counter();
+    this->end_time_ = debug_timer_ms_.get_cnt();
 
     uint32_t loss_timer = 0;
     loss_timer = this->end_time_ - this->start_time_;
