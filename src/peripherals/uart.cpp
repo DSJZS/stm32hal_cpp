@@ -14,7 +14,7 @@ Uart::Uart(const Uart& other_uart)
     : ptr_huart_(other_uart.ptr_huart_)
 {}
 
-UART_HandleTypeDef* Uart::get_ptr_huart(void) const
+UART_HandleTypeDef* Uart::handle(void) const
 {
     return this->ptr_huart_;
 }

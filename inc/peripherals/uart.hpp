@@ -14,7 +14,7 @@ public:
 
     Uart(const Uart& other_uart);
 
-    UART_HandleTypeDef* get_ptr_huart(void) const;
+    UART_HandleTypeDef* handle(void) const;
 
     HAL_StatusTypeDef transmit( const uint8_t *pData,
             uint16_t Size, uint32_t Timeout = HAL_MAX_DELAY) const;
