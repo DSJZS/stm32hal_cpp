@@ -46,9 +46,24 @@ uint16_t Core::get_psc(void) const
     return 0;
 }
 
-TIM_HandleTypeDef* Core::ptr_handle(void) const
+TIM_HandleTypeDef* Core::handle(void) const
 {
     return this->ptr_htim_;
+}
+
+void Core::set_handle( TIM_HandleTypeDef* ptr_htim )
+{
+    this->ptr_htim_ = ptr_htim;
+}
+
+
+bool  Core::isValid(void) const
+{
+    if( this->ptr_htim_ == nullptr )
+        return false;
+    else
+        return true;
+        
 }
 
 Base::Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable)

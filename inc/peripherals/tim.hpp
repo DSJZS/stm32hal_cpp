@@ -22,7 +22,10 @@ public:
     void set_psc( uint16_t psc ) const;
     uint16_t get_psc(void) const;
 
-    TIM_HandleTypeDef* ptr_handle(void) const;
+    TIM_HandleTypeDef* handle(void) const;
+    void set_handle( TIM_HandleTypeDef* ptr_htim );
+
+    bool  isValid(void) const;
 };
 
 class Base : public Core{
