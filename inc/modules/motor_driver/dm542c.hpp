@@ -55,7 +55,7 @@ public:
  * ARR : 调节脉冲频率
  * CCR : = ARR >> 1
  * TRGO : Update Event
- * Channelx : PWM Generation CHx
+ * Channelx : PWM Generation CHx( PWM mode 1 )
  * 按照 PWM 配置
  * 
  * TIMy 配置: 
@@ -65,7 +65,7 @@ public:
  * ARR : 尽可能大, 增大可操作范围
  * CCR : 调节目标脉冲数
  * TRGO : OCxREF
- * Channelx : Output Compare No Output
+ * Channelx : PWM Generation No Output( PWM mode 1 )
  * 
  * 
  * Slave TIM        ITR0    ITR1    ITR2    ITR3
@@ -89,6 +89,10 @@ public:
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
         const peripheral::tim::Pwm_Channel& PULSE,
         const peripheral::tim::Pwm_Channel& GATE);
+
+    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps,
+        const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
+        const peripheral::tim::Pwm_Channel& PULSE);
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override;
