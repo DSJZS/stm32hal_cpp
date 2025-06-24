@@ -74,6 +74,14 @@ Dm542c_Pwm::Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps,
     this->init();
 }
 
+Dm542c_Pwm::Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps,
+        const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
+        const peripheral::tim::Pwm_Channel& PULSE)
+    : Dm542c( ct, microsteps, EN, DIR), PULSE_(PULSE), GATE_(nullptr,0)
+{
+    this->init();
+}
+
 void Dm542c_Pwm::init(void)
 {
     this->set_enable(0);
@@ -117,13 +125,16 @@ void Dm542c_Pwm::set_speed(float base_speed) const
 
     this->set_enable(1);
     this->PULSE_.set_duty(base_speed);
-    this->GATE_.set_duty(1);    //  关闭门控
+
+    if( this->GATE_.isValid() )
+        this->GATE_.set_duty(1);    //  关闭门控
 }
 
 // step = angle / ( 1.8 / microsteps )
 void Dm542c_Pwm::set_angle(float angle) const
 {
-    this->set_step( (uint16_t)( angle * this->microsteps_ / 1.8 )  );
+    if( this->GATE_.isValid() )
+        this->set_step( (uint16_t)( angle * this->microsteps_ / 1.8 )  );
 }
 
 }
