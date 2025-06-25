@@ -14,13 +14,13 @@ public:
         CA,     //  共阳极
     };
     enum class DireType{
-        CW,
-        CCW,
+        CW,     //  顺时针
+        CCW,    //  逆时针
     };
     Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR );
 protected:
-    Dm542c::ConnectType ct_;
-    uint16_t microsteps_;
+    Dm542c::ConnectType ct_;    //  共阴极 or 共阳极
+    uint16_t microsteps_;       //  微步
 
     const peripheral::gpio::Pin EN_;
     const peripheral::gpio::Pin DIR_;
@@ -28,8 +28,8 @@ protected:
     void set_enable( uint8_t enable) const;
     void set_dire( Dm542c::DireType dire) const;
 
-    //  set_speed 会关闭门控定位，set_angle 会开启门控定位
-    virtual void set_angle(float angle) const = 0;
+    //  set_speed 会关闭门控定位, set_angle 在angle != 0时会开启门控定位
+    virtual void set_angle(float angle, float base_speed) const = 0;
 };
 
 class Dm542c_Pin : public Dm542c{
@@ -42,7 +42,7 @@ public:
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override; //  undefined
-    virtual void set_angle(float angle) const override;             //  undefined
+    virtual void set_angle(float angle, float base_speed) const override;             //  undefined
 };
 
 /* 如果要使用 set_angle 方法, 门空配置方法
@@ -96,7 +96,7 @@ public:
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override;
-    virtual void set_angle(float angle) const override;
+    virtual void set_angle(float angle, float base_speed) const override;
 };
 
 }

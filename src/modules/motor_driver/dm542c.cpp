@@ -89,6 +89,7 @@ void Dm542c_Pwm::init(void)
     this->PULSE_.stop();
 }
 
+//  uint16_t 对应 16位CCR
 void Dm542c_Pwm::set_step(uint16_t step) const
 {
     this->set_enable(0);
@@ -108,6 +109,8 @@ void Dm542c_Pwm::set_step(uint16_t step) const
 
 void Dm542c_Pwm::set_speed(float base_speed) const
 {
+    this->set_enable(0);
+
     if ( base_speed > 0 )
     {
         this->set_dire( Dm542c::DireType::CW );
@@ -126,15 +129,22 @@ void Dm542c_Pwm::set_speed(float base_speed) const
     this->set_enable(1);
     this->PULSE_.set_duty(base_speed);
 
-    if( this->GATE_.isValid() )
-        this->GATE_.set_duty(1);    //  关闭门控
+    // if( this->GATE_.isValid() )
+    this->GATE_.set_duty(1);    //  关闭门控, 底层自动判断GATE_是否初始化
 }
 
-// step = angle / ( 1.8 / microsteps )
-void Dm542c_Pwm::set_angle(float angle) const
+//  step = angle / ( 1.8 / microsteps )
+//  angle == 0 则关闭门控控制
+void Dm542c_Pwm::set_angle(float angle, float base_speed) const
 {
     if( this->GATE_.isValid() )
-        this->set_step( (uint16_t)( angle * this->microsteps_ / 1.8 )  );
+    {
+        this->set_speed(base_speed);    //  该函数为了兼容性，内部会关闭门控
+        if( angle != 0 )                //  如果有指定的角度，设置并打开门控
+            this->set_step( (uint16_t)( angle * this->microsteps_ / 1.8 )  );
+    } else {
+        this->set_speed(base_speed);
+    }
 }
 
 }
