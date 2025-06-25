@@ -28,8 +28,10 @@ protected:
     void set_enable( uint8_t enable) const;
     void set_dire( Dm542c::DireType dire) const;
 
-    //  set_speed 会关闭门控定位, set_angle 在angle != 0时会开启门控定位
-    virtual void set_angle(float angle, float base_speed) const = 0;
+    //  set_speed 会关闭门控定位
+    //  set_angle 在 angle != 0 时会开启门控定位, 在 angle == 0 时等价于 set_speed
+    virtual void set_angle(float angle, float base_speed = 0.0f) const = 0;
+    virtual bool is_rotation_complete(void) const = 0;
 };
 
 class Dm542c_Pin : public Dm542c{
@@ -42,7 +44,8 @@ public:
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override; //  undefined
-    virtual void set_angle(float angle, float base_speed) const override;             //  undefined
+    virtual void set_angle(float angle, float base_speed = 0.0f) const override; //  undefined
+    virtual bool is_rotation_complete(void) const override; //  undefined
 };
 
 /* 如果要使用 set_angle 方法, 门空配置方法
@@ -63,7 +66,7 @@ public:
  * Trigger Mode : ITRx ( 指向 TIMx )
  * Clock Source : Disable
  * ARR : 尽可能大, 增大可操作范围
- * CCR : 调节目标脉冲数
+ * CCR : 调节目标脉冲数, 最大值为 ARR+1 即关闭定位( 要求 ARR 值合理，放置 +1 后溢出 )
  * TRGO : OCxREF
  * Channelx : PWM Generation No Output( PWM mode 1 )
  * 
@@ -96,7 +99,8 @@ public:
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override;
-    virtual void set_angle(float angle, float base_speed) const override;
+    virtual void set_angle(float angle, float base_speed = 0.0f) const override;
+    virtual bool is_rotation_complete(void) const override;
 };
 
 }

@@ -147,4 +147,15 @@ void Dm542c_Pwm::set_angle(float angle, float base_speed) const
     }
 }
 
+bool Dm542c_Pwm::is_rotation_complete(void) const
+{
+    if( this->GATE_.isValid() == false )
+        return false;
+    
+    if( this->GATE_.get_cnt() >= this->GATE_.get_arr() ) // PWM mode 1
+        return true;
+    else
+        return false;
+}
+
 }
