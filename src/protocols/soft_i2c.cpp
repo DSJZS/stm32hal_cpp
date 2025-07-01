@@ -39,7 +39,7 @@ uint8_t Soft_I2C::send_start(void)
     this->soft_nop();
 
     if( !( this->sda_.read() ))
-        return Soft_I2C::I2C_BUS_BUSY_;
+        return I2C_STATE_::I2C_BUS_BUSY_;
 
     this->sda_.reset();
     this->soft_nop();
@@ -48,9 +48,9 @@ uint8_t Soft_I2C::send_start(void)
     this->soft_nop();
 
     if( this->sda_.read() )
-        return Soft_I2C::I2C_BUS_ERROR_;
+        return I2C_STATE_::I2C_BUS_ERROR_;
 
-    return Soft_I2C::I2C_BUS_READY_;
+    return I2C_STATE_::I2C_BUS_READY_;
 }
 
 void Soft_I2C::send_stop(void)
@@ -106,7 +106,7 @@ uint8_t Soft_I2C::wait_ack(void)
         if( ucErrTime > 250 )   //  ucErrTime 最大比较值为 254 ，此处 250 表示尽可能的等待
         {
             this->send_stop();
-            return Soft_I2C::I2C_BUS_ERROR_;
+            return I2C_STATE_::I2C_BUS_ERROR_;
         }
     }
 

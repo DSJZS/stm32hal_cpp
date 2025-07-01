@@ -7,14 +7,9 @@ namespace cya::protocol{
 
 class Soft_I2C : public interface::I2C_Interface{
 private:
-    enum I2C_STATE_{
-        I2C_BUS_BUSY_ = 0,
-        I2C_BUS_ERROR_,
-        I2C_BUS_READY_
-    };
-
     peripheral::gpio::Pin sda_;
     peripheral::gpio::Pin scl_;
+    
     uint8_t level_trans_interval_;
     uint8_t number_of_retry_;
     void soft_delay(uint32_t dly);
