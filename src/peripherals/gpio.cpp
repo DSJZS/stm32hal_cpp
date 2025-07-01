@@ -7,6 +7,16 @@ Pin::Pin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin)
     : port_(GPIOx), pin_(GPIO_Pin)
 {}
 
+Pin::Pin( const Pin& other)
+    : port_(other.port_), pin_(other.pin_)
+{}
+
+Pin::Pin(Pin&& other)
+    : port_(other.port_), pin_(other.pin_)
+{
+    other.port_ = nullptr;
+}
+
 void Pin::set(void) const
 {
     if( this->port_ )

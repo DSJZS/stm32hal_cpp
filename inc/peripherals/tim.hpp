@@ -31,6 +31,9 @@ public:
 class Base : public Core{
 public:
     Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable = false);
+    Base( const Base& other);
+    Base( Base&& other);
+
     HAL_StatusTypeDef start(void) const;
     HAL_StatusTypeDef start_it(void) const;
     HAL_StatusTypeDef start_dma(const uint32_t *pData, uint16_t Length) const;
@@ -39,7 +42,7 @@ public:
     HAL_StatusTypeDef stop_dma(void) const;
 };
 
-/*
+/*  废案，占空比上下限可调Pwm
 class Pwm{
 private:
     TIM_HandleTypeDef* ptr_htim_;
@@ -59,6 +62,9 @@ protected:
     uint32_t pwm_channel_;
 public:
     Pwm_Channel(TIM_HandleTypeDef* ptr_htim_,uint32_t pwm_channel,bool pwm_enable = false);
+    Pwm_Channel( const Pwm_Channel& other);
+    Pwm_Channel( Pwm_Channel&& other);
+
     HAL_StatusTypeDef start(void) const;
     HAL_StatusTypeDef stop(void) const;
     void set_duty(float duty) const;
@@ -72,6 +78,10 @@ public:
     Encoder(TIM_HandleTypeDef* ptr_htim_,
             uint32_t encoder_channel = TIM_CHANNEL_ALL,
             bool enable_enable = false);
+
+    Encoder( const Encoder& other);
+    Encoder( Encoder&& other);
+
     HAL_StatusTypeDef start(void) const;
     HAL_StatusTypeDef stop(void) const;
     int16_t get_count_1fm(void) const;

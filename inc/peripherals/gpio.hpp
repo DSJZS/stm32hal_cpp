@@ -10,6 +10,9 @@ private:
     uint16_t pin_;
 public:
     Pin(GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin);
+    Pin( const Pin& other);
+    Pin(Pin&& other);
+    
     void set(void) const;
     void reset(void) const;
     void toggle(void) const;

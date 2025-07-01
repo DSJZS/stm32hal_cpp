@@ -10,9 +10,15 @@ Uart::Uart(UART_HandleTypeDef* ptr_huart)
     : ptr_huart_(ptr_huart)
 {}
 
-Uart::Uart(const Uart& other_uart)
-    : ptr_huart_(other_uart.ptr_huart_)
+Uart::Uart(const Uart& other)
+    : ptr_huart_(other.ptr_huart_)
 {}
+
+Uart::Uart( Uart&& other)
+    : ptr_huart_(other.ptr_huart_)
+{
+    other.ptr_huart_ = nullptr;
+}
 
 UART_HandleTypeDef* Uart::handle(void) const
 {

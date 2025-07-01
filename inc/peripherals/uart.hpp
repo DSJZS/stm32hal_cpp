@@ -12,7 +12,8 @@ private:
 public:
     Uart(UART_HandleTypeDef* ptr_huart);
 
-    Uart(const Uart& other_uart);
+    Uart(const Uart& other);
+    Uart( Uart&& other);
 
     UART_HandleTypeDef* handle(void) const;
 

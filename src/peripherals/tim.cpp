@@ -73,6 +73,16 @@ Base::Base(TIM_HandleTypeDef* ptr_htim, bool tim_enable)
         this->start();
 }
 
+Base::Base( const Base& other)
+    : Core(other.ptr_htim_)
+{}
+
+Base::Base( Base&& other)
+    : Core(other.ptr_htim_)
+{
+    other.ptr_htim_ = nullptr;
+}
+
 HAL_StatusTypeDef Base::start(void) const
 {
     if( this->ptr_htim_ )
@@ -115,12 +125,22 @@ HAL_StatusTypeDef Base::stop_dma(void) const
     return HAL_ERROR;
 }
 
-Pwm_Channel::Pwm_Channel(
-        TIM_HandleTypeDef* ptr_htim,uint32_t pwm_channel,bool pwm_enable)
+Pwm_Channel::Pwm_Channel(TIM_HandleTypeDef* ptr_htim,uint32_t pwm_channel,bool pwm_enable)
     : Core(ptr_htim), pwm_channel_(pwm_channel)
 {
     if( pwm_enable && this->ptr_htim_ )
         this->start();
+}
+
+Pwm_Channel::Pwm_Channel( const Pwm_Channel& other)
+    : Core(other.ptr_htim_), pwm_channel_(other.pwm_channel_)
+{}
+
+Pwm_Channel::Pwm_Channel( Pwm_Channel&& other)
+    : Core(other.ptr_htim_), pwm_channel_(other.pwm_channel_)
+{
+    other.ptr_htim_ = nullptr;
+    other.pwm_channel_ = -1;
 }
 
 HAL_StatusTypeDef Pwm_Channel::start(void) const
@@ -157,6 +177,17 @@ Encoder::Encoder(TIM_HandleTypeDef* ptr_htim,
 {
     if( enable_enable && this->ptr_htim_ )
         HAL_TIM_Encoder_Start(this->ptr_htim_, this->encoder_channel_);
+}
+
+Encoder::Encoder( const Encoder& other)
+    : Core(other.ptr_htim_), encoder_channel_(other.encoder_channel_)
+{}
+
+Encoder::Encoder( Encoder&& other)
+    : Core(other.ptr_htim_), encoder_channel_(other.encoder_channel_)
+{
+    other.ptr_htim_ = nullptr;
+    other.encoder_channel_ = -1;
 }
 
 HAL_StatusTypeDef Encoder::start(void) const
