@@ -55,7 +55,7 @@ Dm542c_Pin::Dm542c_Pin(Dm542c::ConnectType ct, uint16_t microsteps,
 
 void Dm542c_Pin::init(void)
 {
-    this->set_enable(0);
+    this->set_enable(1);
     this->set_dire(Dm542c::DireType::CW);
     this->PULSE_.reset();
 }
@@ -84,7 +84,7 @@ Dm542c_Pwm::Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps,
 
 void Dm542c_Pwm::init(void)
 {
-    this->set_enable(0);
+    this->set_enable(1);
     this->set_dire(Dm542c::DireType::CW);
     this->PULSE_.stop();
 }
@@ -92,24 +92,24 @@ void Dm542c_Pwm::init(void)
 //  uint16_t 对应 16位CCR
 void Dm542c_Pwm::set_step(uint16_t step) const
 {
-    this->set_enable(0);
+    this->set_enable(1);
     
     this->PULSE_.stop();
-    // this->GATE_.stop();
+    this->GATE_.stop();
 
     this->PULSE_.set_cnt(0);
     this->GATE_.set_cnt(0);
     this->GATE_.set_compare(step);
 
-    this->set_enable(1);
+    this->set_enable(0);
 
     this->PULSE_.start();
-    // this->GATE_.start();
+    this->GATE_.start();
 }
 
 void Dm542c_Pwm::set_speed(float base_speed) const
 {
-    this->set_enable(0);
+    this->set_enable(1);
 
     if ( base_speed > 0 )
     {
@@ -122,15 +122,17 @@ void Dm542c_Pwm::set_speed(float base_speed) const
     }
     else
     {
-        this->set_enable(0);
+        this->set_enable(1);
         return;
     }
 
-    this->set_enable(1);
+    this->set_enable(0);
     this->PULSE_.set_duty(base_speed);
 
     // if( this->GATE_.isValid() )
-    this->GATE_.set_duty(1);    //  关闭门控, 底层自动判断GATE_是否初始化
+    this->GATE_.set_compare(1);    //  关闭门控, 底层自动判断GATE_是否初始化
+    this->GATE_.set_cnt(0);
+    this->GATE_.stop();
 }
 
 //  step = angle / ( 1.8 / microsteps )
