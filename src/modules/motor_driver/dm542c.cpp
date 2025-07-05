@@ -100,7 +100,7 @@ void Dm542c_Pwm::set_step(uint16_t step) const
 
     this->PULSE_.set_cnt(0);
     this->GATE_.set_cnt(0);
-    this->GATE_.set_compare(step);
+    this->GATE_.set_ccr(step);
 
     this->set_enable(0);
 
@@ -128,13 +128,24 @@ void Dm542c_Pwm::set_speed(float base_speed) const
     }
 
     this->set_enable(0);
-    this->PULSE_.set_duty(base_speed);
+
+    //  脉冲频率 20~10KHZ
+    // 10K - 100
+    // 20   - 50000
+    // 20 + 9980 * f(x) = 1000000 / f(x)
+    // f(x) = 50000 / (1 + 499x ), 0 ≤ x ≤ 1
+    // f(x) - 1 = ARR
+    uint16_t s_value = 50000 / ( 1 + 499 * base_speed ) - 1;
+    this->PULSE_.stop();
+    this->PULSE_.set_arr( s_value );
+    this->PULSE_.set_ccr( s_value >> 1 );   //  x >> 1 = x / 2
 
     // if( this->GATE_.isValid() )
-    this->GATE_.set_compare(1);    //  关闭门控, 底层自动判断GATE_是否初始化
-    this->GATE_.set_cnt(0);
     this->GATE_.stop();
+    this->GATE_.set_duty(1);    //  关闭门控, 底层自动判断GATE_是否初始化
+    this->GATE_.set_cnt(0);
 
+    this->GATE_.start();
     this->PULSE_.start();
 }
 
@@ -157,7 +168,7 @@ bool Dm542c_Pwm::is_rotation_complete(void) const
     if( this->GATE_.isValid() == false )
         return false;
     
-    if( this->GATE_.get_cnt() >= this->GATE_.get_arr() ) // PWM mode 1
+    if( this->GATE_.get_cnt() >= this->GATE_.get_ccr() ) // PWM mode 1
         return true;
     else
         return false;
