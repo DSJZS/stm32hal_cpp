@@ -17,7 +17,7 @@ public:
         CW,     //  顺时针
         CCW,    //  逆时针
     };
-    Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq， uint32_t max_out_freq, 
+    Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq, 
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR);
 protected:
     Dm542c::ConnectType ct_;    //  共阴极 or 共阳极
@@ -44,7 +44,7 @@ class Dm542c_Pin : public Dm542c{
 private:
     const peripheral::gpio::Pin PULSE_;
 public:
-    Dm542c_Pin( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t max_out_freq, uint32_t min_out_freq,
+    Dm542c_Pin( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq, 
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR, const peripheral::gpio::Pin& PULSE);
 
     virtual void init(void) override;
@@ -95,11 +95,11 @@ private:
 
     void set_step(uint16_t step) const;
 public:
-    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t max_out_freq, uint32_t min_out_freq,
+    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq, 
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
         const peripheral::tim::Pwm_Channel& PULSE,const peripheral::tim::Pwm_Channel& GATE);
 
-    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t max_out_freq, uint32_t min_out_freq,
+    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq, 
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
         const peripheral::tim::Pwm_Channel& PULSE);
 
