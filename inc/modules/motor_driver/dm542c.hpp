@@ -17,10 +17,16 @@ public:
         CW,     //  顺时针
         CCW,    //  逆时针
     };
-    Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR );
+    Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq， uint32_t max_out_freq, 
+        const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR);
 protected:
     Dm542c::ConnectType ct_;    //  共阴极 or 共阳极
+    
     uint16_t microsteps_;       //  微步
+    uint32_t ck_cnt_freq_;     //  时钟源频率
+    
+    uint32_t min_out_freq_;     //  最小输出频率
+    uint32_t max_out_freq_;     //  最大输出频率
 
     const peripheral::gpio::Pin EN_;
     const peripheral::gpio::Pin DIR_;
@@ -33,14 +39,13 @@ protected:
     virtual void set_angle(float angle, float base_speed = 0.0f) const = 0;
     virtual bool is_rotation_complete(void) const = 0;
 };
-
+        
 class Dm542c_Pin : public Dm542c{
 private:
     const peripheral::gpio::Pin PULSE_;
 public:
-    Dm542c_Pin( Dm542c::ConnectType ct, uint16_t microsteps,
-        const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
-        const peripheral::gpio::Pin& PULSE);
+    Dm542c_Pin( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t max_out_freq, uint32_t min_out_freq,
+        const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR, const peripheral::gpio::Pin& PULSE);
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override; //  undefined
@@ -55,7 +60,7 @@ public:
  * Slave Mode : Gated Mode
  * Trigger Mode : ITRy ( 指向 TIMy )
  * Clock Source : Internal Clock
- * PCS : 分频后要有 1MHZ
+ * PCS : 分频后要有 1MHZ( 不然速度计算会错误 )
  * ARR : 调节脉冲频率
  * CCR : = ARR >> 1
  * TRGO : Update Event
@@ -90,12 +95,11 @@ private:
 
     void set_step(uint16_t step) const;
 public:
-    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps,
+    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t max_out_freq, uint32_t min_out_freq,
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
-        const peripheral::tim::Pwm_Channel& PULSE,
-        const peripheral::tim::Pwm_Channel& GATE);
+        const peripheral::tim::Pwm_Channel& PULSE,const peripheral::tim::Pwm_Channel& GATE);
 
-    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps,
+    Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t max_out_freq, uint32_t min_out_freq,
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
         const peripheral::tim::Pwm_Channel& PULSE);
 
