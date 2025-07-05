@@ -55,6 +55,7 @@ public:
  * Slave Mode : Gated Mode
  * Trigger Mode : ITRy ( 指向 TIMy )
  * Clock Source : Internal Clock
+ * PCS : 分频后要有 1MHZ
  * ARR : 调节脉冲频率
  * CCR : = ARR >> 1
  * TRGO : Update Event
@@ -69,6 +70,7 @@ public:
  * CCR : 调节目标脉冲数, 最大值为 ARR+1 即关闭定位( 要求 ARR 值合理，放置 +1 后溢出 )
  * TRGO : OCxREF
  * Channelx : PWM Generation No Output( PWM mode 1 )
+ *            *** 注意关闭 Output Compare Preload ***
  * 
  * 
  * Slave TIM        ITR0    ITR1    ITR2    ITR3
