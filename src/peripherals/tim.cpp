@@ -165,7 +165,7 @@ void Pwm_Channel::set_duty(float duty) const
             duty * ( __HAL_TIM_GET_AUTORELOAD(this->ptr_htim_) + 1 ));
 }
 
-void Pwm_Channel::set_compare(uint16_t ccr) const
+void Pwm_Channel::set_ccr(uint16_t ccr) const
 {
     if( this->ptr_htim_ )
         __HAL_TIM_SET_COMPARE(this->ptr_htim_,this->pwm_channel_,ccr);
