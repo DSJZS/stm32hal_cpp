@@ -141,7 +141,7 @@ void Dm542c_Pwm::set_angle(float angle, float base_speed) const
     {
         this->set_speed(base_speed);    //  该函数为了兼容性，内部会关闭门控
         if( angle != 0 )                //  如果有指定的角度，设置并打开门控
-            this->set_step( (uint16_t)( angle * this->microsteps_ / 1.8 )  );
+            this->set_step( (uint16_t)( angle * this->microsteps_ / 360.0f )  );
     } else {
         this->set_speed(base_speed);
     }
