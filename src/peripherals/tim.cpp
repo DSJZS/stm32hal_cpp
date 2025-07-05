@@ -171,6 +171,13 @@ void Pwm_Channel::set_ccr(uint16_t ccr) const
         __HAL_TIM_SET_COMPARE(this->ptr_htim_,this->pwm_channel_,ccr);
 }
 
+uint16_t Pwm_Channel::get_ccr(void) const
+{
+    if( this->ptr_htim_ )
+        __HAL_TIM_GET_COMPARE(this->ptr_htim_,this->pwm_channel_);
+    return 0;
+}
+
 Encoder::Encoder(TIM_HandleTypeDef* ptr_htim,
         uint32_t encoder_channel, bool enable_enable)
     : Core(ptr_htim), encoder_channel_(encoder_channel)
