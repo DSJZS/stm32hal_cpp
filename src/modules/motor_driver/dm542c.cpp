@@ -31,15 +31,15 @@ void Dm542c::set_dire( Dm542c::DireType dire) const
     if( this->ct_ ==  Dm542c::ConnectType::CC )
     {
         if( dire == Dm542c::DireType::CW )
-            this->EN_.reset();
+            this->DIR_.reset();
         else
-            this->EN_.set();
+            this->DIR_.set();
 
     } else if( this->ct_ ==  Dm542c::ConnectType::CA ) {
         if( dire == Dm542c::DireType::CW )
-            this->EN_.set();
+            this->DIR_.set();
         else
-            this->EN_.reset();
+            this->DIR_.reset();
     }
 }
 
@@ -87,6 +87,7 @@ void Dm542c_Pwm::init(void)
     this->set_enable(1);
     this->set_dire(Dm542c::DireType::CW);
     this->PULSE_.stop();
+    this->GATE_.stop();
 }
 
 //  uint16_t 对应 16位CCR
@@ -133,6 +134,8 @@ void Dm542c_Pwm::set_speed(float base_speed) const
     this->GATE_.set_compare(1);    //  关闭门控, 底层自动判断GATE_是否初始化
     this->GATE_.set_cnt(0);
     this->GATE_.stop();
+
+    this->PULSE_.start();
 }
 
 //  step = angle / ( 1.8 / microsteps )
