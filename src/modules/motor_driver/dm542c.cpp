@@ -154,7 +154,7 @@ void Dm542c_Pwm::set_speed(float base_speed) const
     this->set_rotation_speed( base_speed, true);
 }
 
-//  step = angle / ( 1.8 / microsteps )
+//  step = angle / ( 360 / microsteps )
 //  angle == 0 则关闭门控控制
 void Dm542c_Pwm::set_angle(float angle, float base_speed) const
 {
