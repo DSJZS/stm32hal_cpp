@@ -107,7 +107,16 @@ void Dm542c_Pwm::set_step(uint16_t step) const
     this->GATE_.start();
 }
 
-void Dm542c_Pwm::set_speed(float base_speed) const
+void Dm542c_Pwm::disable_gate(void) const
+{
+    // if( this->GATE_.isValid() )
+    this->GATE_.stop();
+    this->GATE_.set_duty(1);    //  关闭门控, 底层自动判断GATE_是否初始化
+    this->GATE_.set_cnt(0);
+    this->GATE_.start();
+}
+
+void Dm542c_Pwm::set_rotation_speed(float base_speed, bool pulse_enable) const
 {
     this->set_enable(1);
 
@@ -128,16 +137,6 @@ void Dm542c_Pwm::set_speed(float base_speed) const
 
     this->set_enable(0);
 
-    //  脉冲频率 20~10KHZ
-    // 10K - 100
-    // 20   - 50000
-    // 20 + 9980 * f(x) = 1000000 / f(x)
-    // f(x) = 50000 / (1 + 499x ), 0 ≤ x ≤ 1
-    // f(x) - 1 = ARR
-
-    // 2K - 200
-    // 20 - 50000
-    // 20 + 1980 * f(x) = 1000000 / f(x)
     uint16_t freq = this->min_out_freq_ + ( this->max_out_freq_ - this->min_out_freq_ ) * base_speed;
     uint16_t s_value = ( this->ck_cnt_freq_ ) / freq - 1;
 
@@ -145,13 +144,14 @@ void Dm542c_Pwm::set_speed(float base_speed) const
     this->PULSE_.set_arr( s_value );
     this->PULSE_.set_ccr( s_value >> 1 );   //  x >> 1 = x / 2
 
-    // if( this->GATE_.isValid() )
-    this->GATE_.stop();
-    this->GATE_.set_duty(1);    //  关闭门控, 底层自动判断GATE_是否初始化
-    this->GATE_.set_cnt(0);
+    if( pulse_enable )
+        this->PULSE_.start();
+}
 
-    this->GATE_.start();
-    this->PULSE_.start();
+void Dm542c_Pwm::set_speed(float base_speed) const
+{
+    this->disable_gate();
+    this->set_rotation_speed( base_speed, true);
 }
 
 //  step = angle / ( 1.8 / microsteps )
@@ -160,9 +160,12 @@ void Dm542c_Pwm::set_angle(float angle, float base_speed) const
 {
     if( this->GATE_.isValid() )
     {
-        this->set_speed(base_speed);    //  该函数为了兼容性，内部会关闭门控
-        if( angle != 0 )                //  如果有指定的角度，设置并打开门控
+        this->set_rotation_speed(base_speed, false);  //  该函数此时不开启脉冲输出，等待门控设置完成
+        if( angle == 0 )                //  如果没有指定的角度，关闭门控
+            this->disable_gate();
+        else
             this->set_step( (uint16_t)( angle * this->microsteps_ / 360.0f )  );
+        this->PULSE_.start();           //  由于 set_rotation_speed 没打开脉冲输出，这里打开
     } else {
         this->set_speed(base_speed);
     }

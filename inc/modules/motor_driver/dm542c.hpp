@@ -94,6 +94,8 @@ private:
     const peripheral::tim::Pwm_Channel GATE_;   //  门信号通道
 
     void set_step(uint16_t step) const;
+    void disable_gate(void) const;
+    void set_rotation_speed(float base_speed, bool pulse_enable) const;
 public:
     Dm542c_Pwm(Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq, 
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR,
