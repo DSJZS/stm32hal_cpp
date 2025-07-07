@@ -4,7 +4,7 @@
 #include "main.h"
 #include "stm32hal_cpp.hpp"
 /* Exported types ------------------------------------------------------------*/
-extern cya::peripheral::Uart_General debug_uart;
+extern cya::peripheral::uart::General debug_uart;
 extern uint8_t debug_data[256];
 /* Exported constants --------------------------------------------------------*/
 

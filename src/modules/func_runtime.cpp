@@ -9,7 +9,7 @@ uint32_t func_runtime::s_max_loss_time_ = 0;
 uint32_t func_runtime::s_min_loss_time_ = 4294967295;
 
 func_runtime::func_runtime(const char* __func_name__,
-        const peripheral::Uart_General& __debug_uart__,
+        const peripheral::uart::General& __debug_uart__,
         const peripheral::tim::Base& __debug_timer_ms__)
     : func_name_(__func_name__),
       debug_uart_(__debug_uart__),debug_timer_ms_(__debug_timer_ms__),

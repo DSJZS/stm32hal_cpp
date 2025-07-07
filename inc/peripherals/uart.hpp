@@ -2,24 +2,24 @@
 
 #include "main.h"
 
-namespace cya::peripheral{
+namespace cya::peripheral::uart{
 
-class Uart_Base{
+class Base{
 protected:
     UART_HandleTypeDef* ptr_huart_;
     static constexpr uint8_t kPrintBuffLen = 255;
 
 public:
-    Uart_Base(UART_HandleTypeDef* ptr_huart);
+    Base(UART_HandleTypeDef* ptr_huart);
 
     UART_HandleTypeDef* handle(void) const;
 };
 
-class Uart_Block : public Uart_Base{
+class Block : public Base{
 public:
-    Uart_Block( UART_HandleTypeDef* ptr_huart );
-    Uart_Block( const Uart_Block& other );
-    Uart_Block( Uart_Block&& other );
+    Block( UART_HandleTypeDef* ptr_huart );
+    Block( const Block& other );
+    Block( Block&& other );
 
     HAL_StatusTypeDef transmit( const uint8_t *pData,
             uint16_t Size, uint32_t Timeout = HAL_MAX_DELAY) const;
@@ -30,11 +30,11 @@ public:
     HAL_StatusTypeDef printf(const char* format, ...) const;
 };
 
-class Uart_It : public Uart_Base{
+class It : public Base{
 public:
-    Uart_It( UART_HandleTypeDef* ptr_huart );
-    Uart_It( const Uart_It& other );
-    Uart_It( Uart_It&& other );
+    It( UART_HandleTypeDef* ptr_huart );
+    It( const It& other );
+    It( It&& other );
 
     HAL_StatusTypeDef transmit( const uint8_t *pData, uint16_t Size) const;
     HAL_StatusTypeDef receive( uint8_t *pData, uint16_t Size) const;
@@ -42,14 +42,14 @@ public:
     HAL_StatusTypeDef printf(const char* format, ...) const;
 };
 
-class Uart_Dma : public Uart_Base{
+class Dma : public Base{
 private:
     DMA_HandleTypeDef* ptr_dma_rx_;
     DMA_HandleTypeDef* ptr_dma_tx_;
 public:
-    Uart_Dma(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx = nullptr, DMA_HandleTypeDef* ptr_dma_tx = nullptr);
-    Uart_Dma( const Uart_Dma& other );
-    Uart_Dma( Uart_Dma&& other );
+    Dma(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx = nullptr, DMA_HandleTypeDef* ptr_dma_tx = nullptr);
+    Dma( const Dma& other );
+    Dma( Dma&& other );
 
     HAL_StatusTypeDef transmit( const uint8_t *pData, uint16_t Size) const;
     HAL_StatusTypeDef receive( uint8_t *pData, uint16_t Size) const;
@@ -59,19 +59,14 @@ public:
 
 /*  通用串口 */
 
-class Uart_General{
+class General : public Base{
 private:
-    UART_HandleTypeDef* ptr_huart_;
     DMA_HandleTypeDef* ptr_dma_rx_;
     DMA_HandleTypeDef* ptr_dma_tx_;
-
-    static constexpr uint8_t kPrintBuffLen = 255;
 public:
-    Uart_General(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx = nullptr, DMA_HandleTypeDef* ptr_dma_tx = nullptr);
-    Uart_General(const Uart_General& other);
-    Uart_General( Uart_General&& other);
-
-    UART_HandleTypeDef* handle(void) const;
+    General(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx = nullptr, DMA_HandleTypeDef* ptr_dma_tx = nullptr);
+    General(const General& other);
+    General( General&& other);
 
     HAL_StatusTypeDef transmit( const uint8_t *pData,
             uint16_t Size, uint32_t Timeout = HAL_MAX_DELAY) const;
