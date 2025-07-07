@@ -4,7 +4,7 @@
 #include "main.h"
 #include "stm32hal_cpp.hpp"
 /* Exported types ------------------------------------------------------------*/
-extern cya::peripheral::Uart debug_uart;
+extern cya::peripheral::Uart_General debug_uart;
 extern uint8_t debug_data[256];
 /* Exported constants --------------------------------------------------------*/
 
@@ -22,7 +22,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
     if( huart == debug_uart.handle() )
     {
-        debug_uart.receive_toIdle_dma( debug_data, sizeof(debug_data), &hdma_usart1_rx );
+        debug_uart.receive_toIdle_dma( debug_data, sizeof(debug_data));
     }
 }
 
@@ -31,6 +31,6 @@ void HAL_UART_ErrorCallback(UART_HandleTypeDef *huart)
 {
    if( huart == debug_uart.handle() )
    {
-       debug_uart.receive_toIdle_dma( debug_data, sizeof(debug_data), &hdma_usart1_rx );
+       debug_uart.receive_toIdle_dma( debug_data, sizeof(debug_data));
    }
 }

@@ -28,14 +28,14 @@ namespace cya::module{
 class func_runtime{
 private:
     const char* func_name_;
-    peripheral::Uart debug_uart_;
+    peripheral::Uart_General debug_uart_;
     peripheral::tim::Base debug_timer_ms_;
     uint32_t start_time_;
     uint32_t end_time_;
     static uint32_t s_max_loss_time_;
     static uint32_t s_min_loss_time_;
 public:
-    func_runtime(const char* __func_name__, const peripheral::Uart& __debug_uart__,
+    func_runtime(const char* __func_name__, const peripheral::Uart_General& __debug_uart__,
             const peripheral::tim::Base& __debug_timer_ms__);
     ~func_runtime(void);
 };
