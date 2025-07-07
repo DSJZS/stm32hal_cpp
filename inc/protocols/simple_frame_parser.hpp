@@ -25,8 +25,8 @@ public:
     void set_packet_head( uint8_t packet_head );
     virtual bool get_command( Parser_IO* sfp_io) override;
     static bool pack_data(uint8_t* packet, uint8_t* data,
-            uint16_t size, uint8_t packet_id = 0xAA);
-    static int16_t unpack_data(uint8_t* packet, uint8_t* data ,uint8_t packet_id = 0xAA);
+            uint16_t size, uint8_t packet_id);
+    static uint16_t unpack_data(uint8_t* packet, uint8_t* data ,uint8_t packet_id);
 }Simple_Frame;
 
 
