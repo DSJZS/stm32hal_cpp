@@ -19,6 +19,12 @@ public:
     };
     Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq, 
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR);
+    
+    //  set_speed 会关闭门控定位
+    //  set_angle 在 angle != 0 时会开启门控定位, 在 angle == 0 时等价于 set_speed
+    virtual void set_angle(float angle, float base_speed = 0.0f) const = 0;
+    virtual bool is_rotation_complete(void) const = 0;
+
 protected:
     Dm542c::ConnectType ct_;    //  共阴极 or 共阳极
     
@@ -33,11 +39,6 @@ protected:
 
     void set_enable( uint8_t enable) const;
     void set_dire( Dm542c::DireType dire) const;
-
-    //  set_speed 会关闭门控定位
-    //  set_angle 在 angle != 0 时会开启门控定位, 在 angle == 0 时等价于 set_speed
-    virtual void set_angle(float angle, float base_speed = 0.0f) const = 0;
-    virtual bool is_rotation_complete(void) const = 0;
 };
         
 class Dm542c_Pin : public Dm542c{
@@ -107,8 +108,8 @@ public:
 
     virtual void init(void) override;
     virtual void set_speed(float base_speed = 0.0f) const override;
-    virtual void set_angle(float angle, float base_speed = 0.0f) const override;
-    virtual bool is_rotation_complete(void) const override;
+    virtual void set_angle(float angle, float base_speed = 0.0f) const override;    
+    virtual bool is_rotation_complete(void) const override;                         //  
 };
 
 }
