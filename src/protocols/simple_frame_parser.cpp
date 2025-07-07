@@ -33,7 +33,7 @@ bool Simple_Frame_Parser::pack_data(uint8_t* packet, uint8_t* data,
     return true;
 }
 
-int16_t Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint8_t packet_id)
+uint16_t Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint8_t packet_id)
 {
     if( packet_id != packet[0] )
         return Simple_Frame_Parser::ParseState::HEAD_ERR;
@@ -74,6 +74,7 @@ bool Simple_Frame_Parser::get_command( Parser_IO* sfp_io)
     uint8_t packet[Simple_Frame_Parser::kParserBufferLength] = {0}; //  以后改为动态数组
 
     packet_size = sfp_io->rx_buffer->read(packet);
+
     if( packet_size < Simple_Frame_Parser::kCommandMinLength )
         return false;
 
@@ -91,7 +92,9 @@ bool Simple_Frame_Parser::get_command( Parser_IO* sfp_io)
         {
             ++read_size;
             continue;
-        } else{
+        } else {
+            sfp_io->o_data_size = ret;
+            sfp_io->rx_buffer->clear(read_size + packet[read_size+1] );
             return true;
         }
     }
