@@ -72,8 +72,8 @@ public:
  * Slave Mode : External Clock Mode 1
  * Trigger Mode : ITRx ( 指向 TIMx )
  * Clock Source : Disable
- * ARR : 尽可能大, 增大可操作范围
- * CCR : 调节目标脉冲数, 最大值为 ARR+1 即关闭定位( 要求 ARR 值合理，放置 +1 后溢出 )
+ * ARR : 尽可能大, 增大可操作范围( 但要小于最大值,比如最大值为65535,则设计为65530等等 )
+ * CCR : 调节目标脉冲数, 最大值为 ARR+1 即关闭定位( 要求 ARR 值合理，防止 +1 后溢出 )
  * TRGO : OCxREF
  * Channelx : PWM Generation No Output( PWM mode 1 )
  *            *** 注意关闭 Output Compare Preload ***
