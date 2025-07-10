@@ -54,8 +54,8 @@ public:
     virtual bool is_rotation_complete(void) const override; //  undefined
 };
 
-/* 如果要使用 set_angle 方法, 门空配置方法
- * TIMx 输出PWM，TIMy 产生门信号
+/* 如果要使用 set_angle 方法, 门控配置方法
+ * TIMx 输出PWM信号, TIMy 产生门控信号
  * 
  * TIMx 配置: 
  * Slave Mode : Gated Mode
