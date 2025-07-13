@@ -18,9 +18,10 @@ namespace cya::protocol
 typedef class Simple_Frame_Parser{
 private:
     enum ParseState{
-        HEAD_ERR = -3,
-        SIZE_ERR = -2,
-        CHECK_SUM_ERR = -1
+        NO_ERR,
+        HEAD_BYTE_ERR,
+        SIZE_BYTE_ERR,
+        CHECK_SUM_ERR
     };
     //  数据包最小长度
     constexpr static uint16_t kCommandMinLength = 4;
@@ -32,9 +33,9 @@ public:
     Simple_Frame_Parser( uint8_t packet_head );
     void set_packet_head( uint8_t packet_head );
 
-    bool get_command( lwrb_t* buff, uint8_t* data, uint16_t* bwritten);  //  环形队列缓存的实际最大长度应该小于等于 kParserBufferLength
+    bool get_command( lwrb_t* buff, uint8_t* data, uint16_t* size);  //  环形队列缓存的实际最大长度应该小于等于 kParserBufferLength
     static bool pack_data(uint8_t* packet, uint8_t* data,uint16_t size, uint8_t packet_id);
-    static uint16_t unpack_data(uint8_t* packet, uint8_t* data ,uint8_t packet_id);
+    static Simple_Frame_Parser::ParseState unpack_data(uint8_t* packet, uint8_t* data ,uint16_t* size,uint8_t packet_id);
 }Simple_Frame;
 
 
