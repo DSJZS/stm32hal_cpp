@@ -1,6 +1,5 @@
 #include "main.h"
 #include "../../inc/protocols/simple_frame_parser.hpp"
-#include "../../inc/utils/buffer_receiver.hpp"
 
 namespace cya::protocol
 {
@@ -8,6 +7,11 @@ namespace cya::protocol
 Simple_Frame_Parser::Simple_Frame_Parser( uint8_t packet_head )
     : packet_head_( packet_head )
 {}
+
+void Simple_Frame_Parser::set_packet_head( uint8_t packet_head )
+{
+    this->packet_head_ = packet_head;
+}
 
 bool Simple_Frame_Parser::pack_data(uint8_t* packet, uint8_t* data,
         uint16_t data_size,uint8_t packet_id)
@@ -60,20 +64,17 @@ uint16_t Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint8_
     return packet[1] - 3;
 }
 
-void Simple_Frame_Parser::set_packet_head( uint8_t packet_head )
-{
-    this->packet_head_ = packet_head;
-}
 
-bool Simple_Frame_Parser::get_command( Parser_IO* sfp_io)
+
+bool Simple_Frame_Parser::get_command( lwrb_t* buff, uint8_t* data, uint16_t* bwritten)
 {
     int16_t ret = 0;
     uint16_t packet_size = 0;
-    uint16_t read_size = 0;
+    uint16_t skip_size = 0;
 
     uint8_t packet[Simple_Frame_Parser::kParserBufferLength] = {0}; //  以后改为动态数组
 
-    packet_size = sfp_io->rx_buffer->read(packet);
+    packet_size = lwrb_peek( buff, 0, packet, Simple_Frame_Parser::kParserBufferLength );
 
     if( packet_size < Simple_Frame_Parser::kCommandMinLength )
         return false;
@@ -81,20 +82,21 @@ bool Simple_Frame_Parser::get_command( Parser_IO* sfp_io)
     while( 1 )
     {
         ret = Simple_Frame_Parser::unpack_data(
-                packet + read_size, sfp_io->o_data, this->packet_head_ );
+                packet + skip_size, data, this->packet_head_ );
         if( ret == Simple_Frame_Parser::ParseState::SIZE_ERR )
         {
-            sfp_io->rx_buffer->clear(read_size);
+            lwrb_skip( buff, skip_size);
             return false;
         }
         else if( ret == Simple_Frame_Parser::ParseState::HEAD_ERR ||
                 ret == Simple_Frame_Parser::ParseState::CHECK_SUM_ERR )
         {
-            ++read_size;
+            ++skip_size;
             continue;
         } else {
-            sfp_io->o_data_size = ret;
-            sfp_io->rx_buffer->clear(read_size + packet[read_size+1] );
+            if( bwritten )
+                *bwritten = ret;
+             lwrb_skip( buff,  skip_size + packet[skip_size+1] );
             return true;
         }
     }
