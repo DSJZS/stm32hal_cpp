@@ -18,6 +18,7 @@ public:
     };
 
     virtual void init(void) = 0;
+    //  dev_addr 为 7位设备地址
     virtual uint8_t write( uint8_t dev_addr, uint8_t reg_addr,
         uint8_t data_len, uint8_t const* data_buf) = 0;
     virtual uint8_t read( uint8_t dev_addr, uint8_t reg_addr,
