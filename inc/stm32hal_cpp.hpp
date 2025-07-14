@@ -11,6 +11,14 @@
 /* 理应尽快替换的代码 */
 #include "legacy/data_packet_process_interface.hpp"
 
+/* 利用的库(需要自行下载并包含目录)
+ * 
+ * 名称: lwRB 
+ * 作用: 提供适合嵌入式的循环队列
+ * 网址: https://docs.majerle.eu/projects/lwrb/en/latest/index.html、https://github.com/MaJerle/lwrb
+ * 
+ */
+
 /* 文件的依赖关系
  * 目录					可依赖的目录				                  禁止依赖的目录
  * interfaces			无（仅定义接口，不依赖其他目录）		        所有目录

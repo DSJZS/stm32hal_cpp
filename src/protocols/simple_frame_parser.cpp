@@ -1,6 +1,5 @@
 #include "main.h"
 #include "../../inc/protocols/simple_frame_parser.hpp"
-#include "../../inc/utils/buffer_receiver.hpp"
 
 namespace cya::protocol
 {
@@ -8,6 +7,11 @@ namespace cya::protocol
 Simple_Frame_Parser::Simple_Frame_Parser( uint8_t packet_head )
     : packet_head_( packet_head )
 {}
+
+void Simple_Frame_Parser::set_packet_head( uint8_t packet_head )
+{
+    this->packet_head_ = packet_head;
+}
 
 bool Simple_Frame_Parser::pack_data(uint8_t* packet, uint8_t* data,
         uint16_t data_size,uint8_t packet_id)
@@ -33,19 +37,16 @@ bool Simple_Frame_Parser::pack_data(uint8_t* packet, uint8_t* data,
     return true;
 }
 
-int16_t Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint8_t packet_id)
+Simple_Frame_Parser::ParseState Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint16_t* size,uint8_t packet_id)
 {
     if( packet_id != packet[0] )
-        return Simple_Frame_Parser::ParseState::HEAD_ERR;
+        return Simple_Frame_Parser::ParseState::HEAD_BYTE_ERR;
 
     uint16_t packet_size = packet[1];
 
     if( packet_size < Simple_Frame_Parser::kCommandMinLength )
-            return Simple_Frame_Parser::ParseState::SIZE_ERR;
-    if( packet_size != packet[1] )
-        return Simple_Frame_Parser::ParseState::SIZE_ERR;
-
-
+        return Simple_Frame_Parser::ParseState::SIZE_BYTE_ERR;
+    
     uint8_t sum = 0;
     sum += packet[0];
     sum += packet[1];
@@ -57,41 +58,43 @@ int16_t Simple_Frame_Parser::unpack_data(uint8_t* packet, uint8_t* data ,uint8_t
     if( sum != packet[packet_size - 1] )
         return Simple_Frame_Parser::ParseState::CHECK_SUM_ERR;
 
-    return packet[1] - 3;
+    if( size )
+        *size = packet[1] - 3;
+
+    return Simple_Frame_Parser::ParseState::NO_ERR;
 }
 
-void Simple_Frame_Parser::set_packet_head( uint8_t packet_head )
+bool Simple_Frame_Parser::get_command( lwrb_t* buff, uint8_t* data, uint16_t* size)
 {
-    this->packet_head_ = packet_head;
-}
-
-bool Simple_Frame_Parser::get_command( Parser_IO* sfp_io)
-{
-    int16_t ret = 0;
+    Simple_Frame_Parser::ParseState state = Simple_Frame_Parser::ParseState::NO_ERR;
     uint16_t packet_size = 0;
-    uint16_t read_size = 0;
+    uint16_t skip_size = 0;
 
     uint8_t packet[Simple_Frame_Parser::kParserBufferLength] = {0}; //  以后改为动态数组
 
-    packet_size = sfp_io->rx_buffer->read(packet);
+    packet_size = lwrb_peek( buff, 0, packet, Simple_Frame_Parser::kParserBufferLength );
+
     if( packet_size < Simple_Frame_Parser::kCommandMinLength )
         return false;
 
     while( 1 )
     {
-        ret = Simple_Frame_Parser::unpack_data(
-                packet + read_size, sfp_io->o_data, this->packet_head_ );
-        if( ret == Simple_Frame_Parser::ParseState::SIZE_ERR )
+        state = Simple_Frame_Parser::unpack_data( packet + skip_size, data, size,this->packet_head_ );
+
+        if( state == Simple_Frame_Parser::ParseState::HEAD_BYTE_ERR ||
+            state == Simple_Frame_Parser::ParseState::SIZE_BYTE_ERR ||
+            state == Simple_Frame_Parser::ParseState::CHECK_SUM_ERR   )
         {
-            sfp_io->rx_buffer->clear(read_size);
-            return false;
-        }
-        else if( ret == Simple_Frame_Parser::ParseState::HEAD_ERR ||
-                ret == Simple_Frame_Parser::ParseState::CHECK_SUM_ERR )
-        {
-            ++read_size;
-            continue;
-        } else{
+            ++skip_size;
+            if( ( packet_size - skip_size ) < Simple_Frame_Parser::kCommandMinLength )
+            {
+                lwrb_skip( buff, skip_size);
+                return false;
+            } else {
+                continue;
+            }
+        } else if( state == Simple_Frame_Parser::ParseState::NO_ERR ){
+            lwrb_skip( buff,  skip_size + packet[skip_size+1] );
             return true;
         }
     }

@@ -23,10 +23,10 @@ bool pid::float_abs_limit( float* num, float max)
 }
 
 pid::pid(float kp,float ki,float kd,
-        float total_out_limit,float i_band,float i_limit)
+        float total_out_limit,float i_threshold,float i_limit)
     : error_(0.0f), last_error_(0.0f), target_(0.0f), current_(0.0f),
       kp_(kp), ki_(ki), kd_(kd), p_out_(0.0f), i_out_(0.0f), d_out_(0.0f), total_out_(0.0f),
-      total_out_limit_(total_out_limit), i_band_(i_band), i_limit_(i_limit)
+      total_out_limit_(total_out_limit), i_threshold_(i_threshold), i_limit_(i_limit)
 {}
 
 void pid::set_pid(float kp ,float ki,float kd)
@@ -36,11 +36,19 @@ void pid::set_pid(float kp ,float ki,float kd)
     this->kd_ = kd;
 }
 
-void pid::set_limit(float total_out_limit,float i_limit,float i_band)
+void pid::set_out_limit(float total_out_limit)
 {
     this->total_out_limit_ = total_out_limit;
+}
+
+void pid::set_i_limit(float i_limit)
+{
     this->i_limit_ = i_limit;
-    this->i_band_ = i_band;
+}
+
+void pid::set_i_threshold(float i_threshold)
+{
+    this->i_threshold_ = i_threshold;
 }
 
 float pid::calc_output( float target, float current)
@@ -52,7 +60,7 @@ float pid::calc_output( float target, float current)
 
     this->p_out_ = ( this->kp_ * this->error_ );     //  通过本次误差和上次误差得出比例输出
 
-    if( fabsf(this->error_) < this->i_band_)                //  判断是否要进行积分分离
+    if( fabsf(this->error_) < this->i_threshold_)                //  判断是否要进行积分分离
     {
         this->i_out_ += ( this->ki_ * this->error_ );//  积分累计误差
 
@@ -82,6 +90,11 @@ void pid::stop_output(void)
     this->p_out_ = 0;
     this->i_out_ = 0;
     this->d_out_ = 0;
+}
+
+void pid::clear_i_out(void)
+{
+    this->i_out_ = 0;
 }
 
 }

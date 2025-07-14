@@ -68,7 +68,8 @@ public:
     HAL_StatusTypeDef start(void) const;
     HAL_StatusTypeDef stop(void) const;
     void set_duty(float duty) const;
-    void set_compare(uint16_t ccr) const;
+    void set_ccr(uint16_t ccr) const;
+    uint16_t get_ccr(void) const;
 };
 
 class Encoder : public Core{
