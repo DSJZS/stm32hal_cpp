@@ -43,28 +43,22 @@ public:
 };
 
 class Dma : public Base{
-private:
-    DMA_HandleTypeDef* ptr_dma_rx_;
-    DMA_HandleTypeDef* ptr_dma_tx_;
 public:
-    Dma(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx = nullptr, DMA_HandleTypeDef* ptr_dma_tx = nullptr);
+    Dma(UART_HandleTypeDef* ptr_huart);
     Dma( const Dma& other );
     Dma( Dma&& other );
 
     HAL_StatusTypeDef transmit( const uint8_t *pData, uint16_t Size) const;
     HAL_StatusTypeDef receive( uint8_t *pData, uint16_t Size) const;
-    HAL_StatusTypeDef receive_toIdle( uint8_t *pData, uint16_t Size, bool half_trans = false) const;
+    HAL_StatusTypeDef receive_toIdle( uint8_t *pData, uint16_t Size) const;
     HAL_StatusTypeDef printf(const char* format, ...) const;
 };
 
 /*  通用串口 */
 
 class General : public Base{
-private:
-    DMA_HandleTypeDef* ptr_dma_rx_;
-    DMA_HandleTypeDef* ptr_dma_tx_;
 public:
-    General(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx = nullptr, DMA_HandleTypeDef* ptr_dma_tx = nullptr);
+    General(UART_HandleTypeDef* ptr_huart);
     General(const General& other);
     General( General&& other);
 
@@ -87,7 +81,7 @@ public:
 
     HAL_StatusTypeDef receive_toIdle_it( uint8_t *pData, uint16_t Size) const;
 
-    HAL_StatusTypeDef receive_toIdle_dma( uint8_t *pData, uint16_t Size, bool half_trans = false) const;
+    HAL_StatusTypeDef receive_toIdle_dma( uint8_t *pData, uint16_t Size) const;
 
     HAL_StatusTypeDef printf(const char* format, ...) const;
 

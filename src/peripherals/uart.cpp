@@ -123,20 +123,18 @@ HAL_StatusTypeDef It::printf(const char* format, ...) const
 
 /* ****************************dma**************************** */
 
-Dma::Dma(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx, DMA_HandleTypeDef* ptr_dma_tx)
-    : Base(ptr_huart), ptr_dma_rx_(ptr_dma_rx), ptr_dma_tx_(ptr_dma_tx)
+Dma::Dma(UART_HandleTypeDef* ptr_huart)
+    : Base(ptr_huart)
 {}
 
 Dma::Dma( const Dma& other )
-    : Base(other.ptr_huart_), ptr_dma_rx_(other.ptr_dma_rx_), ptr_dma_tx_(other.ptr_dma_tx_)
+    : Base(other.ptr_huart_)
 {}
 
 Dma::Dma( Dma&& other)
-    : Base(other.ptr_huart_), ptr_dma_rx_(other.ptr_dma_rx_), ptr_dma_tx_(other.ptr_dma_tx_)
+    : Base(other.ptr_huart_)
 {
     other.ptr_huart_ = nullptr;
-    other.ptr_dma_rx_ = nullptr;
-    other.ptr_dma_tx_ = nullptr;
 }
 
 HAL_StatusTypeDef Dma::transmit( const uint8_t *pData, uint16_t Size) const
@@ -153,14 +151,12 @@ HAL_StatusTypeDef Dma::receive( uint8_t *pData, uint16_t Size) const
     return HAL_ERROR;
 }
 
-HAL_StatusTypeDef Dma::receive_toIdle( uint8_t *pData, uint16_t Size, bool half_trans) const
+HAL_StatusTypeDef Dma::receive_toIdle( uint8_t *pData, uint16_t Size) const
 {
     if( this->ptr_huart_ )
     {
         HAL_StatusTypeDef ret = HAL_OK;
         ret = HAL_UARTEx_ReceiveToIdle_DMA(this->ptr_huart_, pData, Size);
-        if( ( this->ptr_dma_rx_ != nullptr ) && ( !half_trans ) )
-            __HAL_DMA_DISABLE_IT( this->ptr_dma_rx_, DMA_IT_HT);    //  关闭DMA过半传输中断
         return ret;
     }
     return HAL_ERROR;
@@ -186,20 +182,18 @@ HAL_StatusTypeDef Dma::printf(const char* format, ...) const
 
 /* **************************General************************** */
 
-General::General(UART_HandleTypeDef* ptr_huart, DMA_HandleTypeDef* ptr_dma_rx, DMA_HandleTypeDef* ptr_dma_tx)
-    : Base(ptr_huart), ptr_dma_rx_(ptr_dma_rx), ptr_dma_tx_(ptr_dma_tx)
+General::General(UART_HandleTypeDef* ptr_huart)
+    : Base(ptr_huart)
 {}
 
 General::General(const General& other)
-    : Base(other.ptr_huart_), ptr_dma_rx_(other.ptr_dma_rx_), ptr_dma_tx_(other.ptr_dma_tx_)
+    : Base(other.ptr_huart_)
 {}
 
 General::General( General&& other)
-    : Base(other.ptr_huart_), ptr_dma_rx_(other.ptr_dma_rx_), ptr_dma_tx_(other.ptr_dma_tx_)
+    : Base(other.ptr_huart_)
 {
     other.ptr_huart_ = nullptr;
-    other.ptr_dma_rx_ = nullptr;
-    other.ptr_dma_tx_ = nullptr;
 }
 
 HAL_StatusTypeDef General::receive( uint8_t *pData,
@@ -261,14 +255,12 @@ HAL_StatusTypeDef General::receive_toIdle_it( uint8_t *pData, uint16_t Size) con
     return HAL_ERROR;
 }
 
-HAL_StatusTypeDef General::receive_toIdle_dma( uint8_t *pData, uint16_t Size, bool half_trans) const
+HAL_StatusTypeDef General::receive_toIdle_dma( uint8_t *pData, uint16_t Size) const
 {
     if( this->ptr_huart_ )
     {
         HAL_StatusTypeDef ret = HAL_OK;
         ret = HAL_UARTEx_ReceiveToIdle_DMA(this->ptr_huart_, pData, Size);
-        if( ( this->ptr_dma_rx_ != nullptr ) && ( !half_trans ) )
-            __HAL_DMA_DISABLE_IT( this->ptr_dma_rx_, DMA_IT_HT);    //  关闭DMA过半传输中断
         return ret;
     }
     return HAL_ERROR;
