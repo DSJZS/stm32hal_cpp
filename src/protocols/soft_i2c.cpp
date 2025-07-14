@@ -237,7 +237,7 @@ uint8_t Soft_I2C::soft_read( uint8_t dev_addr, uint8_t reg_addr,
     return 0x00;
 }
 
-int Soft_I2C::write( uint8_t dev_addr, uint8_t reg_addr,
+uint8_t Soft_I2C::write( uint8_t dev_addr, uint8_t reg_addr,
             uint8_t data_len, uint8_t const* data_buf)
 {
     uint8_t retries = 0, ret = 0;
@@ -252,7 +252,7 @@ int Soft_I2C::write( uint8_t dev_addr, uint8_t reg_addr,
     return ret;
 }
 
-int Soft_I2C::read( uint8_t dev_addr, uint8_t reg_addr,
+uint8_t Soft_I2C::read( uint8_t dev_addr, uint8_t reg_addr,
             uint8_t data_len, uint8_t * data_buf)
 {
     uint8_t retries = 0, ret = 0;

@@ -18,9 +18,9 @@ public:
     };
 
     virtual void init(void) = 0;
-    virtual int write( uint8_t dev_addr, uint8_t reg_addr,
+    virtual uint8_t write( uint8_t dev_addr, uint8_t reg_addr,
         uint8_t data_len, uint8_t const* data_buf) = 0;
-    virtual int read( uint8_t dev_addr, uint8_t reg_addr,
+    virtual uint8_t read( uint8_t dev_addr, uint8_t reg_addr,
             uint8_t data_len, uint8_t* data_buf) = 0;
 };
 
