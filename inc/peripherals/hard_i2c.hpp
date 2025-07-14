@@ -27,7 +27,6 @@ public:
     HAL_StatusTypeDef mem_write_it( uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size);
     HAL_StatusTypeDef mem_read_it( uint16_t DevAddress, uint16_t MemAddress, uint16_t MemAddSize, uint8_t *pData, uint16_t Size);
 
-
     HAL_StatusTypeDef master_transmit_dma( uint16_t DevAddress, uint8_t *pData, uint16_t Size);
     HAL_StatusTypeDef master_receive_dma( uint16_t DevAddress, uint8_t *pData, uint16_t Size);
     HAL_StatusTypeDef slave_transmit_dma( uint8_t *pData, uint16_t Size);
