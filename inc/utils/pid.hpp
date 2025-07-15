@@ -1,6 +1,7 @@
 #pragma once
 
 #include "main.h"
+#include <cmath>
 
 namespace cya::utils{
 
@@ -32,7 +33,8 @@ public:
     void set_out_limit(float total_out_limit);
     void set_i_limit(float i_limit);
     void set_i_threshold(float i_threshold);
-    float calc_output( float target, float current);
+    void set_target(float target);
+    float calc_output(float current, float target = std::numeric_limits<float>::quiet_NaN());
     void stop_output(void);
     void clear_i_out(void);
 };

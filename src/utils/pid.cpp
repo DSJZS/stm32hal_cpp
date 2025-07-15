@@ -51,9 +51,16 @@ void pid::set_i_threshold(float i_threshold)
     this->i_threshold_ = i_threshold;
 }
 
-float pid::calc_output( float target, float current)
+void pid::set_target(float target)
 {
     this->target_ = target;
+}
+
+float pid::calc_output( float current, float target)
+{
+    if( !std::isnan(target) )
+        this->target_ = target;
+        
     this->current_ = current;
 
     this->error_ = this->target_ - this->current_;            //  得出本次误差
