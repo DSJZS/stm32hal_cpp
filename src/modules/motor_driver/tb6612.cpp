@@ -1,6 +1,7 @@
 #include "../../../inc/modules/motor_driver/tb6612.hpp"
 #include "../../../inc/peripherals/gpio.hpp"
 #include "../../../inc/peripherals/tim.hpp"
+#include "../../../inc/utils/float_is_equal.hpp"
 
 namespace cya::module::motor_driver{
 
@@ -33,7 +34,7 @@ void Tb6612::back(void) const
 
 
 
-void Tb6612::bark(void) const
+void Tb6612::brake(void) const
 {
     this->IN_1_.set();
     this->IN_2_.set();
@@ -53,6 +54,12 @@ void Tb6612::init(void)
 
 void Tb6612::set_speed(float base_speed) const
 {
+    if( float_is_equal( base_speed, 0, 1e-3,1e-3) )
+    {
+        this->brake();
+        return;
+    }
+
     if ( base_speed > 0 )
     {
         this->forward();
@@ -61,10 +68,6 @@ void Tb6612::set_speed(float base_speed) const
     {
         this->back();
         base_speed = -base_speed;
-    }
-    else
-    {
-        this->bark();
     }
 
     this->PWM_.set_duty(base_speed);

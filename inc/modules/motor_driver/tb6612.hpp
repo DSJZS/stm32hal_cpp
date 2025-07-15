@@ -14,7 +14,7 @@ private:
 
     void forward(void) const;
     void back(void) const;
-    void bark(void) const;
+    void brake(void) const;
     void stop(void) const;
 public:
     Tb6612(const Tb6612& other);
