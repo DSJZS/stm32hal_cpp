@@ -8,21 +8,19 @@ namespace cya::module{
 uint32_t func_runtime::s_max_loss_time_ = 0;
 uint32_t func_runtime::s_min_loss_time_ = 4294967295;
 
-func_runtime::func_runtime(const char* __func_name__,
-        const peripheral::uart::General& __debug_uart__,
-        const peripheral::tim::Base& __debug_timer_ms__)
+func_runtime::func_runtime(const char* __func_name__, peripheral::tim::Base* __debug_timer_ms__, peripheral::uart::General* __debug_uart__)
     : func_name_(__func_name__),
-      debug_uart_(__debug_uart__),debug_timer_ms_(__debug_timer_ms__),
+      debug_timer_ms_(__debug_timer_ms__),debug_uart_(__debug_uart__),
       start_time_(0), end_time_(0)
 {
-    debug_timer_ms_.start();
-    debug_timer_ms_.set_cnt(0);
-    this->start_time_ = debug_timer_ms_.get_cnt();
+    debug_timer_ms_->start();
+    debug_timer_ms_->set_cnt(0);
+    this->start_time_ = debug_timer_ms_->get_cnt();
 }
 
 func_runtime::~func_runtime(void)
 {
-    this->end_time_ = debug_timer_ms_.get_cnt();
+    this->end_time_ = debug_timer_ms_->get_cnt();
 
     uint32_t loss_timer = 0;
     loss_timer = this->end_time_ - this->start_time_;
@@ -32,7 +30,8 @@ func_runtime::~func_runtime(void)
     if( loss_timer < func_runtime::s_min_loss_time_ )
         func_runtime::s_min_loss_time_ = loss_timer;
 
-    this->debug_uart_.printf("%s - max:%u us,min:%u us,cur:%u us\n",
+    if( this->debug_uart_ )
+        this->debug_uart_->printf("%s - max:%u us,min:%u us,cur:%u us\n",
             this->func_name_,
             func_runtime::s_max_loss_time_,
             func_runtime::s_min_loss_time_,
