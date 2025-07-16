@@ -61,7 +61,7 @@ class Pwm_Channel : public Core{
 protected:
     uint32_t pwm_channel_;
 public:
-    Pwm_Channel(TIM_HandleTypeDef* ptr_htim_,uint32_t pwm_channel,bool pwm_enable = false);
+    Pwm_Channel(TIM_HandleTypeDef* ptr_htim,uint32_t pwm_channel,bool pwm_enable = false);
     Pwm_Channel( const Pwm_Channel& other);
     Pwm_Channel( Pwm_Channel&& other);
 
@@ -70,6 +70,20 @@ public:
     void set_duty(float duty) const;
     void set_ccr(uint16_t ccr) const;
     uint16_t get_ccr(void) const;
+};
+
+class IC : public Core{
+protected:
+    uint32_t ic_channel_;
+public:
+    IC(TIM_HandleTypeDef* ptr_htim,uint32_t ic_channel);
+    IC( const IC& other);
+    IC( IC&& other);
+
+    HAL_StatusTypeDef start(void) const;
+    HAL_StatusTypeDef start_it(void) const;
+    HAL_StatusTypeDef stop(void) const;
+    HAL_StatusTypeDef stop_it(void) const;
 };
 
 class Encoder : public Core{
@@ -91,5 +105,7 @@ public:
     int16_t get_count_4fm(void) const;
     float get_count_4fm_f(void) const;
 };
+
+
 
 }

@@ -178,6 +178,41 @@ uint16_t Pwm_Channel::get_ccr(void) const
     return 0;
 }
 
+IC::IC(TIM_HandleTypeDef* ptr_htim,uint32_t ic_channel)
+    : Core(ptr_htim), ic_channel_(ic_channel)
+{}
+
+IC::IC( const IC& other)
+    : Core(other.ptr_htim_), ic_channel_(other.ic_channel_)
+{}
+
+IC::IC( IC&& other)
+    : Core(other.ptr_htim_), ic_channel_(other.ic_channel_)
+{
+    other.ptr_htim_ = nullptr;
+    other.ic_channel_ = -1;
+}
+
+HAL_StatusTypeDef IC::start(void) const
+{
+    return HAL_TIM_IC_Start( this->ptr_htim_, this->ic_channel_);
+}
+
+HAL_StatusTypeDef IC::start_it(void) const
+{
+    return HAL_TIM_IC_Start_IT( this->ptr_htim_, this->ic_channel_);
+}
+
+HAL_StatusTypeDef IC::stop(void) const
+{
+    return HAL_TIM_IC_Stop( this->ptr_htim_, this->ic_channel_);
+}
+
+HAL_StatusTypeDef IC::stop_it(void) const
+{
+    return HAL_TIM_IC_Stop_IT( this->ptr_htim_, this->ic_channel_);
+}
+
 Encoder::Encoder(TIM_HandleTypeDef* ptr_htim,
         uint32_t encoder_channel, bool enable_enable)
     : Core(ptr_htim), encoder_channel_(encoder_channel)
