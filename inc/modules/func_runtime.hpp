@@ -1,12 +1,8 @@
 #pragma once
 
-#include "main.h"
+#include <stdint.h>
 #include "../peripherals/uart.hpp"
 #include "../peripherals/tim.hpp"
-/*  包含tim.h方便外部调取调试用定时器的句柄*/
-#include "tim.h"
-/*  包含tim.h方便外部调取调试用串口的句柄*/
-#include "usart.h"
 
 namespace cya::module{
 
@@ -36,7 +32,7 @@ private:
     static uint32_t s_min_loss_time_;
 public:
     func_runtime(const char* __func_name__, peripheral::tim::Base* __debug_timer_ms__, peripheral::uart::General* __debug_uart__);
-    ~func_runtime(void);
+    ~func_runtime();
 };
 
 }

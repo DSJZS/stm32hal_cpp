@@ -15,10 +15,11 @@ func_runtime::func_runtime(const char* __func_name__, peripheral::tim::Base* __d
 {
     debug_timer_ms_->start();
     debug_timer_ms_->set_cnt(0);
+    debug_timer_ms_->set_arr(0xffff);
     this->start_time_ = debug_timer_ms_->get_cnt();
 }
 
-func_runtime::~func_runtime(void)
+func_runtime::~func_runtime()
 {
     this->end_time_ = debug_timer_ms_->get_cnt();
 
