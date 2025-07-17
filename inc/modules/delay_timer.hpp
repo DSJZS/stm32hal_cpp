@@ -5,6 +5,7 @@
 
 namespace cya::module{
 
+//  需要提供预分频后时钟为 1MHZ 的定时器
 void delay_init(  peripheral::tim::Base* p_timer );
 
 void delay_us(uint32_t us);
