@@ -84,6 +84,8 @@ public:
     HAL_StatusTypeDef start_it(void) const;
     HAL_StatusTypeDef stop(void) const;
     HAL_StatusTypeDef stop_it(void) const;
+
+    uint16_t get_ccr(void) const;
 };
 
 class Encoder : public Core{

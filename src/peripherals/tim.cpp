@@ -213,6 +213,13 @@ HAL_StatusTypeDef IC::stop_it(void) const
     return HAL_TIM_IC_Stop_IT( this->ptr_htim_, this->ic_channel_);
 }
 
+uint16_t IC::get_ccr(void) const
+{
+    if( this->ptr_htim_ )
+        HAL_TIM_ReadCapturedValue(this->ptr_htim_,this->ic_channel_);
+    return 0;
+}
+
 Encoder::Encoder(TIM_HandleTypeDef* ptr_htim,
         uint32_t encoder_channel, bool enable_enable)
     : Core(ptr_htim), encoder_channel_(encoder_channel)
