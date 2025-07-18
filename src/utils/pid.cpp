@@ -24,7 +24,7 @@ bool pid::float_abs_limit( float* num, float max)
 
 pid::pid(float kp,float ki,float kd,
         float total_out_limit,float i_threshold,float i_limit)
-    : error_(0.0f), last_error_(0.0f), target_(0.0f), current_(0.0f),
+    : error_(0.0f), last_error_(0.0f), target_(0.0f), current_(0.0f),last_current_(0.0f),
       kp_(kp), ki_(ki), kd_(kd), p_out_(0.0f), i_out_(0.0f), d_out_(0.0f), total_out_(0.0f),
       total_out_limit_(total_out_limit), i_threshold_(i_threshold), i_limit_(i_limit)
 {}
@@ -56,7 +56,7 @@ void pid::set_target(float target)
     this->target_ = target;
 }
 
-float pid::calc_output( float current, float target)
+float pid::calc_output( float current, float target, bool is_dom)
 {
     if( !std::isnan(target) )
         this->target_ = target;
@@ -78,13 +78,18 @@ float pid::calc_output( float current, float target)
         this->i_out_ = 0;                                 //  清零积分输出
     }
 
-    this->d_out_ = ( this->kd_ * ( this->error_ - this->last_error_ ) );   //  通过本次误差和上次误差得出微分输出
+    if( !is_dom )
+        this->d_out_ = ( this->kd_ * ( this->error_ - this->last_error_ ) );   //  通过本次误差和上次误差得出微分输出
+    else
+        this->d_out_ = ( this->kd_ * ( this->current_ - this->last_current_ ) );   //  通过当前值和上次值得出微分输出
 
     this->total_out_ = this->p_out_ + this->i_out_ + this->d_out_;                  //  通过比例输出、积分输出、微分输出得出总输出
 
     this->float_abs_limit( &(this->total_out_), this->total_out_limit_ );                   //  判断总输出是否过大，对其进行限制
 
-    this->last_error_ = this->error_;                                           //  将本次输出保存到上次输出变量以供下一次运算
+    this->last_error_ = this->error_;                                           //  将本次误差保存到上次误差以供下一次运算
+
+    this->last_current_ = this->current_;                                        //  将当前值保存到上次值以供下一次运算
 
     return this->total_out_;
 }

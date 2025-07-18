@@ -13,6 +13,8 @@ private:
 
     float target_;           //  目标值
     float current_;          //  当前值
+    float last_current_;    //  上次值
+
     float kp_;               //  Kp参数
     float ki_;               //  Ki参数
     float kd_;               //  Kd参数
@@ -34,7 +36,7 @@ public:
     void set_i_limit(float i_limit);
     void set_i_threshold(float i_threshold);
     void set_target(float target);
-    float calc_output(float current, float target = std::numeric_limits<float>::quiet_NaN());
+    float calc_output(float current, float target = std::numeric_limits<float>::quiet_NaN(), bool is_dom = false);  //  is_dom 判断是不是微分先行
     void stop_output(void);
     void clear_i_out(void);
 };
