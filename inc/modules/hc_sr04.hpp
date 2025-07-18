@@ -23,7 +23,7 @@ public:
     uint32_t get_down_edge_cnt(void);
 
     //  返回值单位为 m
-    float get_distance( uint32_t timeout );
+    float get_distance( uint32_t timeout ); //  建议每 15 ms及以上执行一次( 配以低通滤波 )
 };
 
 }

@@ -47,17 +47,17 @@ float Hc_Sr04::get_distance( uint32_t timeout )
 
     this->trig_.set();
     //  延时 40~50 us
-    delay_us(45);
+    delay_us(50);
     this->trig_.reset();
     this->ic_direct_.set_cnt(0);
 
-    while( !(this->up_edge_) || !(this->down_edge_) )
+    while( this->up_edge_ >= this->down_edge_ )
     {
         if( timeout != 0xFFFFFFFFU )
         {
-            --timeout;
-            if( !timeout )
-                return std::numeric_limits<float>::infinity();
+            if( --timeout )
+                continue;
+            return std::numeric_limits<float>::infinity();
         }
     }
 
