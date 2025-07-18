@@ -174,7 +174,7 @@ void Pwm_Channel::set_ccr(uint16_t ccr) const
 uint16_t Pwm_Channel::get_ccr(void) const
 {
     if( this->ptr_htim_ )
-        __HAL_TIM_GET_COMPARE(this->ptr_htim_,this->pwm_channel_);
+        return __HAL_TIM_GET_COMPARE(this->ptr_htim_,this->pwm_channel_);
     return 0;
 }
 
@@ -216,7 +216,7 @@ HAL_StatusTypeDef IC::stop_it(void) const
 uint16_t IC::get_ccr(void) const
 {
     if( this->ptr_htim_ )
-        HAL_TIM_ReadCapturedValue(this->ptr_htim_,this->ic_channel_);
+        return HAL_TIM_ReadCapturedValue(this->ptr_htim_,this->ic_channel_);
     return 0;
 }
 
