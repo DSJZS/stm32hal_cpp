@@ -34,8 +34,8 @@ public:
     void set_packet_head( uint8_t packet_head );
 
     bool get_command( lwrb_t* buff, uint8_t* data, uint16_t* size);  //  环形队列缓存的实际最大长度应该小于等于 kParserBufferLength
-    static bool pack_data(uint8_t* packet, uint8_t* data,uint16_t size, uint8_t packet_id);
-    static Simple_Frame_Parser::ParseState unpack_data(uint8_t* packet, uint8_t* data ,uint16_t* size,uint8_t packet_id);
+    static bool pack_data(uint8_t* packet, uint8_t* data,uint16_t data_size, uint8_t packet_id);
+    static Simple_Frame_Parser::ParseState unpack_data(uint8_t* packet, uint8_t* data ,uint16_t* data_size,uint8_t packet_id);
 }Simple_Frame;
 
 
