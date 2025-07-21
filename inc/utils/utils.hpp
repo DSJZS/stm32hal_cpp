@@ -5,3 +5,4 @@
 #include "./pid.hpp"
 #include "./float_is_equal.hpp"
 #include "./low_pass_filter.h"
+#include "./median_filter.h"
