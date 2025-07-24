@@ -21,9 +21,11 @@ bool Simple_Frame_Parser::pack_data(uint8_t* packet, uint8_t* data,
     packet[0] = packet_id;
     sum += packet[0];
 
-    packet[1] = data_size + 3;
-    if( packet[1] > 256 )
+    if( data_size + 3 > 256 )
         return false;
+
+    packet[1] = data_size + 3;
+    
     sum += packet[1];
 
     for( int i = 2 ; i < packet[1] - 1 ; ++i)
