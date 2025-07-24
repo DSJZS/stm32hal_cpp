@@ -5,7 +5,7 @@
 
 #include "main.h"
 
-#include "../../inc/utils/PID.hpp"
+#include "../../inc/utils/pid.hpp"
 #include <cmath>
 
 namespace cya::hal::utils{
