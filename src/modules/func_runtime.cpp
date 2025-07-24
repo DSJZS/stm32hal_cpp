@@ -3,7 +3,7 @@
 #include "../../inc/peripherals/uart.hpp"
 #include "../../inc/peripherals/tim.hpp"
 
-namespace cya::module{
+namespace cya::stm32::module{
 
 uint32_t func_runtime::s_max_loss_time_ = 0;
 uint32_t func_runtime::s_min_loss_time_ = 4294967295;

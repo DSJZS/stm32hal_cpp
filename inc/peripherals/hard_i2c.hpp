@@ -3,7 +3,7 @@
 #include "../interfaces/i2c_interface.hpp"
 #include <stdint.h>
 
-namespace cya::peripheral{
+namespace cya::stm32::peripheral{
 
 class Hard_I2C : public interface::I2C_Interface{
 private:

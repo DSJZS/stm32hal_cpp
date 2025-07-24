@@ -1,6 +1,6 @@
 #pragma once
 
-namespace cya::module{
+namespace cya::stm32::module{
 
 class Blue_Tooth{
 public:

@@ -2,7 +2,7 @@
 
 #include "../peripherals/gpio.hpp"
 
-namespace cya::module{
+namespace cya::stm32::module{
 
 class Led{
 public:

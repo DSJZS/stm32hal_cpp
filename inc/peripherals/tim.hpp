@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::peripheral::tim{
+namespace cya::stm32::peripheral::tim{
 
 class Core{ //  方便用户修改对应数据
 protected:

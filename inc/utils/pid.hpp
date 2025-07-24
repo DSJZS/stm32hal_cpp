@@ -3,7 +3,7 @@
 #include "main.h"
 #include <cmath>
 
-namespace cya::utils{
+namespace cya::stm32::utils{
 
 class pid{
 private:

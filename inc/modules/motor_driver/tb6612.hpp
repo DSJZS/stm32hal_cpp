@@ -4,7 +4,7 @@
 #include "../../peripherals/gpio.hpp"
 #include "../../peripherals/tim.hpp"
 
-namespace cya::module::motor_driver{
+namespace cya::stm32::module::motor_driver{
 
 class Tb6612 : public motor_driver::Base{
 private:

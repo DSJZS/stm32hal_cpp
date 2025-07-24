@@ -3,7 +3,7 @@
 #include "main.h"
 #include "lwrb/lwrb.h"
 
-namespace cya::protocol
+namespace cya::stm32::protocol
 {
 
 /*  数据格式:

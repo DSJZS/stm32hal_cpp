@@ -3,7 +3,7 @@
 #include "../../../inc/peripherals/tim.hpp"
 #include "../../../inc/utils/float_is_equal.hpp"
 
-namespace cya::module::motor_driver{
+namespace cya::stm32::module::motor_driver{
 
 //  全局定义电机类时需要额外在程序中执行一遍 init()
 

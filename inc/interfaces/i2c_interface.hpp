@@ -2,7 +2,7 @@
 
 #include <stdint.h>
 
-namespace cya::interface{
+namespace cya::stm32::interface{
 
 class I2C_Interface{
 public:

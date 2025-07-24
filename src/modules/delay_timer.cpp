@@ -1,6 +1,6 @@
 #include "../../inc/modules/delay_timer.hpp"
 
-namespace cya::module{
+namespace cya::stm32::module{
 
 static peripheral::tim::Base* delay_timer_us;
 

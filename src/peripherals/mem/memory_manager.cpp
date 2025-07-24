@@ -1,7 +1,7 @@
 #include "../../../inc/peripherals/mem/mem_manager.h"
 #include "../../../inc/peripherals/mem/memory_manager.hpp"
 
-namespace cya::peripheral{
+namespace cya::stm32::peripheral{
 
 static class Mem_Manager{
 public:

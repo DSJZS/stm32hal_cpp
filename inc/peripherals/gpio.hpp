@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::peripheral::gpio{
+namespace cya::stm32::peripheral::gpio{
 
 class Pin{
 private:

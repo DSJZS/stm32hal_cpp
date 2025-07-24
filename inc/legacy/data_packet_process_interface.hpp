@@ -3,7 +3,7 @@
 
 #include "main.h"
 
-namespace cya::legacy{
+namespace cya::stm32::legacy{
 
 /* 打包与解包的接口
  * pack_data    用于给数据进行打包操作，需要提供以下参数：
