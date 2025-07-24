@@ -19,7 +19,7 @@ public:
     GPIO_PinState read(void) const;
     void write(uint8_t pin_state) const;
 
-    Pin& operator>>( uint8_t state);
+    Pin& operator>>( uint8_t& state);
     Pin& operator<<( uint8_t state);
 };
 
@@ -34,7 +34,7 @@ public:
     uint16_t read(void) const;
     void write(uint16_t port_state) const;
 
-    Port& operator>>( uint16_t state);
+    Port& operator>>( uint16_t& state);
     Port& operator<<( uint16_t state);
 };
 
