@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/peripherals/hard_i2c.hpp"
 
-namespace cya::stm32::peripheral{
+namespace cya::hal::peripheral{
 
 Hard_I2C::Hard_I2C( I2C_HandleTypeDef *ptr_hi2c )
     : ptr_hi2c_(ptr_hi2c)

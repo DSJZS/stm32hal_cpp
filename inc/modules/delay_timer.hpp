@@ -3,7 +3,7 @@
 #include <stdint.h>
 #include "../peripherals/tim.hpp"
 
-namespace cya::stm32::module{
+namespace cya::hal::module{
 
 //  需要提供预分频后时钟为 1MHZ 的定时器
 void delay_init(  peripheral::tim::Base* p_timer );

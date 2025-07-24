@@ -3,7 +3,7 @@
 #include "../interfaces/i2c_interface.hpp"
 #include "../peripherals/gpio.hpp"
 
-namespace cya::stm32::protocol{
+namespace cya::hal::protocol{
 
 class Soft_I2C : public interface::I2C_Interface{
 private:

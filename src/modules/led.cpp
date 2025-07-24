@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/modules/led.hpp"
 
-namespace cya::stm32::module{
+namespace cya::hal::module{
 
 Led::Led(peripheral::gpio::Pin& pin, Led::ActiveLevel level)
     : pin_(pin), level_(level)

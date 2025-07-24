@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <cstring>
 
-namespace cya::stm32::peripheral::uart{
+namespace cya::hal::peripheral::uart{
 
 /* ***************************block*************************** */
 

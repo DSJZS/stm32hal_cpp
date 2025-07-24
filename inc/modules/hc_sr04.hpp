@@ -3,7 +3,7 @@
 #include "../peripherals/gpio.hpp"
 #include "../peripherals/tim.hpp"
 
-namespace cya::stm32::module{
+namespace cya::hal::module{
 
 class Hc_Sr04{
 private:

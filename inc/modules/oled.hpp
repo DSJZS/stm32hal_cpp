@@ -1,6 +1,6 @@
 #pragma once
 
-namespace cya::stm32::module::oled{
+namespace cya::hal::module::oled{
 
 
 

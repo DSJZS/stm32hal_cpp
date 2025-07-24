@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::stm32::module::motor_driver{
+namespace cya::hal::module::motor_driver{
 
 class Base{
 public:

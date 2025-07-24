@@ -1,7 +1,7 @@
 #include "../../inc/Legacy/data_packet_process_interface.hpp"
 #include <cstring>
 
-namespace cya::stm32::legacy{
+namespace cya::hal::legacy{
 
 bool Data_Packet_Checksum::pack_data(uint8_t* packet, uint8_t* data, uint16_t data_size,
         uint8_t packet_id, uint32_t hParam,uint32_t lParam)

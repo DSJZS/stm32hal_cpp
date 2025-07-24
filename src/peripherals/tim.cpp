@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/peripherals/tim.hpp"
 
-namespace cya::stm32::peripheral::tim{
+namespace cya::hal::peripheral::tim{
 
 Core::Core(TIM_HandleTypeDef* ptr_htim)
     : ptr_htim_(ptr_htim)

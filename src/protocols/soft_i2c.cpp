@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/protocols/soft_i2c.hpp"
 
-namespace cya::stm32::protocol{
+namespace cya::hal::protocol{
 
 Soft_I2C::Soft_I2C( const peripheral::gpio::Pin& sda, const peripheral::gpio::Pin& scl,
         uint8_t level_trans_interval, uint8_t number_of_retry )

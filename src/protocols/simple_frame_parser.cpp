@@ -1,7 +1,7 @@
 #include "main.h"
 #include "../../inc/protocols/simple_frame_parser.hpp"
 
-namespace cya::stm32::protocol
+namespace cya::hal::protocol
 {
 
 Simple_Frame_Parser::Simple_Frame_Parser( uint8_t packet_head )

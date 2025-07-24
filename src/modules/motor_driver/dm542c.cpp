@@ -2,7 +2,7 @@
 #include "../../../inc/peripherals/gpio.hpp"
 #include "../../../inc/peripherals/tim.hpp"
 
-namespace cya::stm32::module::motor_driver{
+namespace cya::hal::module::motor_driver{
 
 Dm542c::Dm542c( Dm542c::ConnectType ct, uint16_t microsteps, uint32_t ck_cnt_freq, uint32_t min_out_freq, uint32_t max_out_freq,
         const peripheral::gpio::Pin& EN, const peripheral::gpio::Pin& DIR)

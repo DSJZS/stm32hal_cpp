@@ -2,7 +2,7 @@
 
 #include "main.h"
 
-namespace cya::stm32::peripheral::uart{
+namespace cya::hal::peripheral::uart{
 
 class Base{
 protected:

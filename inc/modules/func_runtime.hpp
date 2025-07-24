@@ -4,7 +4,7 @@
 #include "../peripherals/uart.hpp"
 #include "../peripherals/tim.hpp"
 
-namespace cya::stm32::module{
+namespace cya::hal::module{
 
 /* 函数耗时定时器
  * 用于测量一个函数耗费了多少时间

@@ -4,7 +4,7 @@
 #include "../../peripherals/gpio.hpp"
 #include "../../peripherals/tim.hpp"
 
-namespace cya::stm32::module::motor_driver{
+namespace cya::hal::module::motor_driver{
 
 //  默认 共阳极 接法
 class Dm542c : public motor_driver::Base{

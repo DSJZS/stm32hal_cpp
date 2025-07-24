@@ -3,7 +3,7 @@
 #include "../../inc/modules/delay_timer.hpp"
 #include <cmath>
 
-namespace cya::stm32::module{
+namespace cya::hal::module{
 
 Hc_Sr04::Hc_Sr04( const peripheral::gpio::Pin& trig, const peripheral::tim::IC& ic_direct, const peripheral::tim::IC& ic_indirect)
     : trig_(trig), ic_direct_(ic_direct), ic_indirect_(ic_indirect)
