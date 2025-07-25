@@ -8,20 +8,20 @@ namespace cya::hal::module{
 uint32_t func_runtime::s_max_loss_time_ = 0;
 uint32_t func_runtime::s_min_loss_time_ = 4294967295;
 
-func_runtime::func_runtime(const char* __func_name__, peripheral::tim::Base* __debug_timer_ms__, peripheral::uart::General* __debug_uart__)
+func_runtime::func_runtime(const char* __func_name__, peripheral::tim::Base* __debug_timer_us__, peripheral::uart::General* __debug_uart__)
     : func_name_(__func_name__),
-      debug_timer_ms_(__debug_timer_ms__),debug_uart_(__debug_uart__),
+      debug_timer_us_(__debug_timer_us__),debug_uart_(__debug_uart__),
       start_time_(0), end_time_(0)
 {
-    debug_timer_ms_->start();
-    debug_timer_ms_->set_cnt(0);
-    debug_timer_ms_->set_arr(0xffff);
-    this->start_time_ = debug_timer_ms_->get_cnt();
+    debug_timer_us_->start();
+    debug_timer_us_->set_cnt(0);
+    debug_timer_us_->set_arr(0xffff);
+    this->start_time_ = debug_timer_us_->get_cnt();
 }
 
 func_runtime::~func_runtime()
 {
-    this->end_time_ = debug_timer_ms_->get_cnt();
+    this->end_time_ = debug_timer_us_->get_cnt();
 
     uint32_t loss_timer = 0;
     loss_timer = this->end_time_ - this->start_time_;
